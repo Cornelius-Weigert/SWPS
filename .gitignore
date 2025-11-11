@@ -11,6 +11,10 @@ __pycache__/
 *.pyo
 *.pyd
 
+# pm4py practice 
+practice/pm4py_test.py
+
+
 # OS files
 .DS_Store
 Thumbs.db
