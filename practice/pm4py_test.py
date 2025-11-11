@@ -16,6 +16,8 @@ def main():
     
     # Discover the directly follows graph
     directly_follows_graph, start_activities, end_activities = pm4py.discover_dfg(log)
+    dfg, sa, ea = pm4py.filtering.filter_dfg_activities_percentage(directly_follows_graph, start_activities, end_activities, percentage=0.25)
+    pm4py.vis.save_vis_performance_dfg(dfg, sa, ea,'temp_graphs/performance_dfg.svg')
     # bpmn= pm4py.discover_bpmn_inductive(log)
     # Visualize the DFG
     # pm4py.view_dfg(directly_follows_graph, start_activities, end_activities,format='svg',graph_title="Directly Follows Graph")
@@ -23,9 +25,9 @@ def main():
     # filtered_dfg, filtered_start_activities, filtered_end_activities = get_filtered_dfg(directly_follows_graph, start_activities, end_activities)
     # pm4py.view_dfg(filtered_dfg, filtered_start_activities, filtered_end_activities, format='svg')
 
-    attributes_count = pm4py.statistics.attributes.log.get.get_attribute_values(log,'Activity')
-    filtered_dfg, filtered_start_activities, filtered_end_activities, new_count = pm4py.algo.filtering.dfg.dfg_filtering.filter_dfg_keep_connected(directly_follows_graph,start_activities,end_activities,attributes_count,1000000)
-    pm4py.view_dfg(filtered_dfg, filtered_start_activities, filtered_end_activities, format='svg')
+    # attributes_count = pm4py.statistics.attributes.log.get.get_attribute_values(log,'Activity')
+    # filtered_dfg, filtered_start_activities, filtered_end_activities, new_count = pm4py.algo.filtering.dfg.dfg_filtering.filter_dfg_keep_connected(directly_follows_graph,start_activities,end_activities,attributes_count,1000000)
+    # pm4py.view_dfg(filtered_dfg, filtered_start_activities, filtered_end_activities, format='svg')
     # attributes_count = pm4py.statistics.attributes.log.get.get_attribute_values(log2, all_attributes)
     # print(attributes_count)
 
