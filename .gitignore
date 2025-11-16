@@ -1,5 +1,5 @@
 # Ignore eventlogs directory (large files)
-Eventlogs/
+# Eventlogs/
 # If you still want other files in Eventlogs tracked, ignore only xes:
 # Eventlogs/*.xes
 
@@ -22,3 +22,5 @@ Thumbs.db
 # Temporary files
 *.log
 *.tmp
+
+*.xes
