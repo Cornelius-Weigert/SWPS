@@ -1,8 +1,9 @@
 import streamlit as st
 import eventlog_to_image 
-import pm4py
+import load_eventLog
+import re
 
-log = pm4py.read_xes('Eventlogs/running-example.xes')
+log = load_eventLog.eventLog_from_csv('Eventlogs/eventlog.csv')
 
 st.title("Hello, Streamlit!")
 st.write("""*Hello World!*
@@ -10,7 +11,8 @@ st.write("""*Hello World!*
 
 # display BPMN and DFG images
 st.title("BPMN Visualization from XES Log")
-st.image(eventlog_to_image.get_bpmn_image(log))
+st.image(eventlog_to_image.get_bpmn_image(log,percentage=0.95))
+
 
 st.title("Directly Follows Graph from XES Log")
-st.image(eventlog_to_image.get_dfg_image(log))
+st.image(eventlog_to_image.get_dfg_image(log,percentage=0.15))
