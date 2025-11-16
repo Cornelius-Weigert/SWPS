@@ -2,12 +2,17 @@ import pandas as pd
 import pm4py
 
 def eventLog_from_csv(path, separator=',', case_id='Case ID', activity_key='Activity', timestamp_key='Complete Timestamp'):
+    """Load an event log from a CSV file and convert it to PM4Py event log format. path describes the file path to the CSV file.
+    case_id, activity_key, and timestamp_key specify the column names for case ID, activity, and timestamp respectively.
+    This function returns the event log in PM4Py format."""
     dataframe = pd.read_csv(path, sep=separator)
     dataframe = pm4py.format_dataframe(dataframe, case_id=case_id, activity_key=activity_key, timestamp_key=timestamp_key)
     log = pm4py.convert_to_event_log(dataframe)
     return log
 
 def eventLog_from_xes(path):
+    """Load an event log from an XES file. path describes the file path to the XES file. 
+    This function returns the event log in PM4Py format."""
     log = pm4py.read_xes(path)
     return log
 
