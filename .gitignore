@@ -1,0 +1,26 @@
+# Ignore eventlogs directory (large files)
+# Eventlogs/
+# If you still want other files in Eventlogs tracked, ignore only xes:
+# Eventlogs/*.xes
+
+# Python virtual environment
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# pm4py practice 
+practice/pm4py_test.py
+
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+
+BPI_Challenge_2019.xes
