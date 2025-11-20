@@ -1,6 +1,8 @@
 import streamlit as st
 import os
 import tempfile
+import load_eventLog
+import eventlog_to_image
 
 # Funktion zum Hochladen 
 def upload_eventlog():
@@ -38,3 +40,14 @@ file_path, file_type = upload_eventlog()
 if file_path:
     st.write(f" Dateipfad: {file_path}")
     st.write(f" Dateityp: {file_type}")
+
+darstell_button = st.button("Hauptprozess darstellen")
+
+# Darstellen des Hauptporzesses nachdem auf den Darstellbutton geklickt wurde
+if darstell_button:
+    if file_type == "CSV":
+        log = load_eventLog.eventLog_from_csv(file_path)
+    elif file_type == "XES":
+        log = load_eventLog.eventLog_from_xes(file_path)
+    st.image(eventlog_to_image.get_dfg_image(log))
+    
