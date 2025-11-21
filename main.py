@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from Datenanalyse_Outliers.reader import read_event_log
 from Datenanalyse_Outliers.basic import basic_analysis
 from Datenanalyse_Outliers.frequency import frequency
@@ -9,6 +10,19 @@ from Datenanalyse_Outliers.standard_compare import compare_with_standardwert
 from Datenanalyse_Outliers.outlier_activity_duration import activity_duration_outliers
 from Datenanalyse_Outliers.outlier_case_duration import case_duration_outliers
 from Datenanalyse_Outliers.outlier_numeric import numeric_outliers
+=======
+from reader import read_event_log
+from basic import basic_analysis
+from frequency import frequency
+from numeric import numeric
+from resources import resources
+from time_analysis import time_analysis
+from duration import duration_pro_activity
+from standard_compare import compare_with_standardwert
+from outlier_activity_duration import activity_duration_outliers
+from outlier_case_duration import case_duration_outliers
+from outlier_numeric import numeric_outliers
+>>>>>>> bfd097c3ccd98788adf1f8df3becc0ed90b2502a
 import pandas as pd
 
 
