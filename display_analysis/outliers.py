@@ -43,6 +43,6 @@ def show_outliers(log):
         numeric_cols
     )
 
-    outliers_numeric, bounds_numeric = outlier_numeric.numeric_outliers(df, selected_numeric)
+    outliers_numeric, bounds_numeric = outlier_numeric.numeric_outliers(log1, selected_numeric)
     st.write(f"Schwellenwerte: {bounds_numeric}")
     st.dataframe(outliers_numeric, use_container_width=True)

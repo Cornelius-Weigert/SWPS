@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # 5. Resource / String Analyse mit Diagramm
 # ===========================
 def resources(log, event_col="concept:name", resource_col="org:resource"):
-    if resource_col not in df.columns:
+    if resource_col not in log.columns:
         print("->>>Keine Ressourcenspalten gefunden")
         return
     

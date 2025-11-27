@@ -44,23 +44,29 @@ if file_path:
     st.write(f" Dateipfad: {file_path}")
     st.write(f" Dateityp: {file_type}")
 
-darstell_button = st.button("Hauptprozess darstellen")
 
-# Darstellen des Hauptporzesses nachdem auf den Darstellbutton geklickt wurde
-if darstell_button:
-    #/////////////////
-    log=None
-    #///////////////////
+#/////////////////
+log=None
+if file_path is not None:
     if file_type == "CSV":
         log = load_eventLog.eventLog_from_csv(file_path)
     elif file_type == "XES":
         log = load_eventLog.eventLog_from_xes(file_path)
-    st.image(eventlog_to_image.get_dfg_image(log))
 
+darstell_button = st.button("Hauptprozess darstellen")
+
+# Darstellen des Hauptporzesses nachdem auf den Darstellbutton geklickt wurde
+if darstell_button:
+    if log is not None:
+         st.image(eventlog_to_image.get_dfg_image(log))
+    
+    
+     
     #////////////////////////////////
+darstell_button2 = st.button("Datenanalyse anzeigen")
+
+if darstell_button2:
     if log is not None:
         show_all_analysis(log)
     else:
-        st.error("Feler beim Laden der Dateo.")
-    
-
+        st.error("Fehler beim Laden der Dateo ")
