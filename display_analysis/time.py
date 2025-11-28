@@ -6,7 +6,7 @@ def show_time(log):
 
     durations = time_analysis.time_analysis1(log)
     if durations is None:
-        st.info("Keine Timestamps – Analyse übersprungen.")
+        st.info("Keine Timestamps - Analyse übersprungen.")
         return
     
 

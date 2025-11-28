@@ -1,7 +1,9 @@
+###################################
+#diese main-Methode ist nicht benötigt
+######################################
 
 from Datenanalyse_Outliers.statistic_analysis.reader import read_event_log
 from Datenanalyse_Outliers.statistic_analysis.basic import basic_analysis
-from Datenanalyse_Outliers.statistic_analysis.frequency import frequency
 from Datenanalyse_Outliers.statistic_analysis.numeric import numeric
 from Datenanalyse_Outliers.statistic_analysis.resources import resources
 from Datenanalyse_Outliers.statistic_analysis.time_analysis import time_analysis
@@ -71,15 +73,9 @@ def full_log_analysis(path):
         print(value_outliers)
 
 
-    #?????????Standardwer-Vergleich???????????????????????????????
-    standardwerte ={
-        "a":3,
-        "b":4,
-        "c":5
-    }
-    compare_with_standardwert(df, standardwerte, value_col="value")
+    #Standardwer-Vergleich
+    
 
-    return df, merged
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 df = full_log_analysis("event_log.xes")  # oder CSV

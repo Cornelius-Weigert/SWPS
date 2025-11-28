@@ -9,7 +9,7 @@ from statistic_analysis import (
 
 def show_outliers(log):
 
-    st.subheader("❗️ Ausreißer – Case Duration")
+    st.subheader("❗️ Ausreißer - Case Duration")
 
     durations = time_analysis.time_analysis1(log)
     if durations is not None:
@@ -17,9 +17,9 @@ def show_outliers(log):
         st.write(f"Schwellenwerte (Sekunden): {bounds_case}")
         st.dataframe(outliers_case, use_container_width=True)
     else:
-        st.info("Keine Zeitdaten – Case Duration Outliers übersprungen.")
+        st.info("Keine Zeitdaten - Case Duration Outliers übersprungen.")
 
-    st.subheader("❗️Ausreißer – Activity Duration")
+    st.subheader("❗️Ausreißer - Activity Duration")
 
     activity_df = duration.duration_pro_activity(log)
     if activity_df is not None:
@@ -27,14 +27,14 @@ def show_outliers(log):
         st.write(f"Schwellenwerte (Sekunden): {bounds_activity}")
         st.dataframe(outliers_activity, use_container_width=True)
     else:
-        st.info("Keine Aktivitätsdauer – Activity Outliers übersprungen.")
+        st.info("Keine Aktivitätsdauer - Activity Outliers übersprungen.")
 
-    st.subheader("❗️Ausreißer – Numerische Werte")
+    st.subheader("❗️Ausreißer - Numerische Werte")
 
     numeric_cols = log.select_dtypes(include="number").columns
 
     if len(numeric_cols) == 0:
-        st.info("Keine numerischen Spalten – Numeric Outliers übersprungen.")
+        st.info("Keine numerischen Spalten - Numeric Outliers übersprungen.")
         return
 
     # users can choose the column of numeric analysis
