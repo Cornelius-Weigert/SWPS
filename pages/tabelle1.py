@@ -1,10 +1,11 @@
 
 #kompatibel mit button.py: hochladen einer Datei in button.py lässt tabelle1 erst laden!
 
-
 import streamlit as st
 import pandas as pd
 import pm4py
+import Datenanalyse_Outlier.eventlog_to_image as eventlog_to_image
+import Datenanalyse_Outlier.load_eventLog as load_eventLog
 
 st.title("🧭 Process-Mining Preview")
 
@@ -65,11 +66,13 @@ try:
     if file_type == "CSV":
         df = pd.read_csv(file_path)
         df = map_columns(df)
+        log = load_eventLog.eventLog_from_csv(file_path)
 
     elif file_type == "XES":
         log = pm4py.read_xes(file_path)
         df = pm4py.convert_to_dataframe(log)
         df = map_columns(df)
+        log = load_eventLog.eventLog_from_xes(file_path)
 
     else:
         st.error("❌ Unbekanntes Dateiformat.")
@@ -123,6 +126,9 @@ st.markdown("---")
 # --- DIRECTLY-FOLLOWS GRAPH ---          muss mit Cornelius seinem Code vllt zusammengeführt werden ?
 st.subheader("🔁 Directly-Follows Graph (DFG)")
 
+percentage_slider = st.slider("Prozentsatz der häufigsten Pfade anzeigen (%)", min_value=5, max_value=100, value=20, step=5)/100
+st.image(eventlog_to_image.get_dfg_image(log,percentage=percentage_slider))
+
 df_sorted = df.sort_values(["case_id", "timestamp"])
 transitions = []
 
@@ -132,6 +138,7 @@ for case in df_sorted["case_id"].unique():
 
 dfg_df = pd.DataFrame(transitions, columns=["Von", "Nach"])
 st.dataframe(dfg_df, width='stretch')
+
 
 
 # komischer KeyError, muss noch behoben werden (wahrscheinlich wegen dem code in button.py)
