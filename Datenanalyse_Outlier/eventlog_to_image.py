@@ -3,7 +3,7 @@ import datetime
 import os
 
 def main():
-    log = pm4py.read_xes('Eventlogs/running-example.xes')   
+    log = pm4py.read_xes('Eventlogs/eventlog.csv')   
     directly_follows_graph, start_activities, end_activities = pm4py.discover_dfg(log)
     
     pm4py.save_vis_dfg(directly_follows_graph, start_activities, end_activities, 'temp_graphs/'+str(datetime.date.today())+'_dfg.png')
