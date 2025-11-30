@@ -66,7 +66,6 @@ def map_columns(df):
     return df
 '''
 map_column(df)
-
 try:
     if file_type == "CSV":
         df = pd.read_csv(file_path)
