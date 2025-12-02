@@ -23,8 +23,6 @@ st.info("➡️ Wähle links im Menü eine Seite aus, z.B. *Dashboard*, *Eventlo
 
 
 
-import streamlit as st
-
 st.set_page_config(layout="wide")
 
 st.title("🏠 Dashboard")

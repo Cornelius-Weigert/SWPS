@@ -2,7 +2,6 @@
 # Test der animierten Fenster und Chartboards von Streamlit Elemements
 
 
-
 from streamlit_elements import elements, mui, html
 
 
