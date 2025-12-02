@@ -76,6 +76,7 @@ except Exception as e:
     st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
     st.stop()
 
+
 # --- STATISTIKEN ---
 st.subheader("📊 Log-Statistiken")
 
@@ -92,14 +93,15 @@ col4.metric("Period", str(timespan))
 
 st.markdown("---")
 
+# --- DIRECTLY-FOLLOWS GRAPH ---          muss mit Cornelius seinem Code vllt zusammengeführt werden ?
+st.subheader("🔁 Directly-Follows Graph (DFG)")
+
+percentage_slider = st.slider("Prozentsatz der häufigsten Pfade anzeigen (%)", min_value=5, max_value=100, value=20, step=5)/100
+st.image(eventlog_to_image.get_dfg_image(log,percentage=percentage_slider))
+
 # --- HÄUFIGSTE AKTIVITÄTEN ---
 st.subheader("🔥 Häufigste Aktivitäten")
 st.bar_chart(df["activity"].value_counts())
 
 st.markdown("---")
 
-# --- DIRECTLY-FOLLOWS GRAPH ---          muss mit Cornelius seinem Code vllt zusammengeführt werden ?
-st.subheader("🔁 Directly-Follows Graph (DFG)")
-
-percentage_slider = st.slider("Prozentsatz der häufigsten Pfade anzeigen (%)", min_value=5, max_value=100, value=20, step=5)/100
-st.image(eventlog_to_image.get_dfg_image(log,percentage=percentage_slider))
