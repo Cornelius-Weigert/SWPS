@@ -7,7 +7,6 @@ from pages.map_columns import map_column
 import pm4py
 import pandas as pd
 
-
 # --- Upload Funktion ---
 def upload_eventlog():
     uploaded_file = st.file_uploader(
@@ -15,7 +14,6 @@ def upload_eventlog():
         type=["xes", "csv"], 
         key="eventlog_uploader"
     )
-
     if uploaded_file is not None:
 
         # Temporäre Datei sichern
@@ -33,7 +31,6 @@ def upload_eventlog():
 
         st.success(f"Datei erfolgreich hochgeladen: {uploaded_file.name} ({file_type})")
 
-
 # --- UI ---
 st.title("Eventlog hochladen")
 
@@ -41,17 +38,6 @@ st.write("Bitte Eventlog hochladen (XES oder CSV):")
 
 # Upload immer anzeigen (damit neue Datei geladen werden kann)
 upload_eventlog()
-
-# Wenn bereits eine Datei existiert 
-if "file_path" in st.session_state:
-
-    st.subheader("Aktuell geladener Eventlog")
-
-    st.write(f"**Dateiname:** {st.session_state['file_name']}")
-    st.write(f"**Dateityp:** {st.session_state['file_type']}")
-    st.write("**Dateipfad:**")
-    st.code(st.session_state["file_path"])
-    st.success("Datei gespeichert! Wechsel jetzt zur Tabellenansicht")
 
 file_path = st.session_state["file_path"]
 file_type = st.session_state["file_type"]
@@ -93,7 +79,7 @@ col4.metric("Period", str(timespan))
 
 st.markdown("---")
 
-# --- DIRECTLY-FOLLOWS GRAPH ---          muss mit Cornelius seinem Code vllt zusammengeführt werden ?
+# --- DIRECTLY-FOLLOWS GRAPH ---
 st.subheader("🔁 Directly-Follows Graph (DFG)")
 
 percentage_slider = st.slider("Prozentsatz der häufigsten Pfade anzeigen (%)", min_value=5, max_value=100, value=20, step=5)/100
