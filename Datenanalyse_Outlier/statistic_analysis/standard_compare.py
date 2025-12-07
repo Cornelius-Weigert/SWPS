@@ -17,7 +17,17 @@ def compare_with_standardwert(log, standard, event_col="activity", value_col="va
 
     log["Abweichung"] = log[value_col] - log["Standardwert"]
 
-    return log[[value_col, "Standardwert", "Abweichung"]]
+    # Ergebnisse mit Vorzeichen formatiieren 
+    if pd.api.types.is_timedelta64_dtype(log["Abweichung"]):
+        def format_timedelta(td):
+            sign = "+" if td >= pd.Timedelta(0) else "-"
+            td_abs = abs(td)
+            return f"{sign}{td_abs}"
+        log["Abweichung_formatiert"] = log["Abweichung"].apply(format_timedelta)
+    else:
+        log["Abweichung_formatiert"] = log["Abweichung"].apply(lambda x: f"{x:+}")
+
+    return log[[value_col, "Standardwert", "Abweichung", "Abweichung_formatiert"]]
 
 
     
@@ -29,35 +39,6 @@ def compare_with_standardwert(log, standard, event_col="activity", value_col="va
 
 
 
-'''
-Datenanalyse_Outliers.statistic_analysis.standard_compare 的 Docstring
-import pandas as pd
 
-def compare_with_standardwert(log, event_col="concept:name", value_col="value"):
-    
-    """
-    Standardwert und somit Abweichung von Event abrechnen
-    Dataframe: Event, value, Standardwert, Abweichung 
-    """
-
-    # value column erkennen
-    if value_col not in log.columns:
-        print("->>> Keine Spalte gefunden für Standardwert-Vergleich:", value_col)
-        return None
-
-    # 1. Standardwert (Durchschnitt) abrechnen
-    standardwerte = log.groupby(event_col)[value_col].mean()
-
-    # 2. Standwert in log abbilden
-    log["Standardwert"] = log[event_col].map(standardwerte)
-
-    # 3️. Abweichung = value - Standardwert
-    log["Abweichung"] = log[value_col] - log["Standardwert"]
-
-    print("->>> Standardwert-Vergleich abgeschlossen")
-
-    # return
-    return log[[event_col, value_col, "Standardwert", "Abweichung"]]
-    '''
 
 
