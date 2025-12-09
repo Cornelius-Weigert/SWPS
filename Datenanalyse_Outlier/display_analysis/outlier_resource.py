@@ -1,5 +1,5 @@
 import streamlit as st
-from statistic_analysis.outlier_resource import outlier_resources
+from ..statistic_analysis.outlier_resource import outlier_resources
 
 def show_resource_outliers(log):
     """

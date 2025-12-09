@@ -1,3 +1,8 @@
+import sys, os
+ROOT = os.path.dirname(os.path.abspath(__file__))  
+sys.path.append(os.path.join(ROOT, ".."))  
+
+
 import streamlit as st
 import os
 import tempfile
@@ -6,6 +11,9 @@ import Datenanalyse_Outlier.eventlog_to_image as eventlog_to_image
 from pages.map_columns import map_column
 import pm4py
 import pandas as pd
+from Datenanalyse_Outlier.display_analysis.main import show_all_analysis   
+from Datenanalyse_Outlier.eventlog_to_dataframe import eventlog_to_df 
+########################################################### 
 
 # --- SESSION STATE INITIALISIEREN ---
 if "uploaded_logs" not in st.session_state or st.session_state["uploaded_logs"] is None:
@@ -72,6 +80,8 @@ try:
 
         st.session_state["df"] = df
         st.session_state["log"] = log
+       
+
 
     elif file_type == "XES":
         log = pm4py.read_xes(file_path)
@@ -81,6 +91,7 @@ try:
 
         st.session_state["df"] = df
         st.session_state["log"] = log
+        
 
 except Exception as e:
     st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
@@ -122,11 +133,35 @@ percentage_slider = st.slider(
 ) / 100
 
 st.image(eventlog_to_image.get_dfg_image(log, percentage=percentage_slider))
+
 st.markdown("---")
 
 # --- HÄUFIGSTE AKTIVITÄTEN ---
 st.subheader("🔥 Häufigste Aktivitäten")
 st.bar_chart(df["activity"].value_counts())
+
+
+
+#############################################################
+# --- STATISTISCHE ANALYSE & AUSREISSER ---
+st.subheader("📊 Statistische Analyse & Ausreißer")
+
+
+  # Eventlog->Dataframe
+if not isinstance(log, pd.DataFrame):
+        log_df = eventlog_to_df(log)
+else:
+        log_df = log.copy()
+
+st.write(log_df.columns)
+log_df = map_column(log_df)
+
+log_df["timestamp"] = pd.to_datetime(log_df["timestamp"], errors="coerce")
+
+log = log_df
+
+show_all_analysis(log)
+
 
 
 

@@ -1,5 +1,5 @@
 import streamlit as st
-from statistic_analysis.outlier_structur import outlier_structure
+from ..statistic_analysis.outlier_structur import outlier_structure
 
 def show_structure_outliers(log):
     """

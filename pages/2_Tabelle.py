@@ -1,13 +1,18 @@
 
 #kompatibel mit button.py: hochladen einer Datei in button.py lässt tabelle1 erst laden!
+import sys, os
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(ROOT)
+print("UPDATED SYSPATH:", sys.path)
 
 import streamlit as st
 import pandas as pd
 import pm4py
-import Datenanalyse_Outlier.eventlog_to_image as eventlog_to_image
-import Datenanalyse_Outlier.load_eventLog as load_eventLog
-from streamlit_elements import elements, mui, nivo 
+from Datenanalyse_Outlier import eventlog_to_image as eventlog_to_image
+from Datenanalyse_Outlier import load_eventLog as load_eventLog
 # from pages.map_columns import map_column
+from streamlit_elements import elements, mui, nivo 
+
 
 st.title("🧭 Tabelle - Ausreißeranalyse")
 

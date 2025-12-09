@@ -1,5 +1,5 @@
 import streamlit as st
-from statistic_analysis.outlier_temporal import temporal_outliers
+from ..statistic_analysis.outlier_temporal import temporal_outliers
 import pandas as pd
 
 
@@ -18,7 +18,6 @@ def deduplicate_columns(log):
 
 
 def show_temporal_outliers(log):
-
     st.subheader("❗️ Ausreißer - Zeitlich")
 
     log = deduplicate_columns(log)

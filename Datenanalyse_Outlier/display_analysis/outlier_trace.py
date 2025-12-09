@@ -1,5 +1,5 @@
 import streamlit as st
-from statistic_analysis.outlier_trace import outlier_trace
+from ..statistic_analysis.outlier_trace import outlier_trace
 def show_trace_outliers(log):
     """
     Zeigt Ausreißer in den Spuren des Ereignisprotokolls im Streamlit-Interface an.
@@ -7,7 +7,7 @@ def show_trace_outliers(log):
     :param log: Das Ereignisprotokoll als DataFrame.
     """
 
-    st.subheader("❗️ Ausreißer - Spuren")
+    st.subheader("❗️ Ausreißer - Traces")
 
     outliers = outlier_trace(log)
 

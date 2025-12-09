@@ -1,5 +1,5 @@
 import streamlit as st
-from statistic_analysis import frequency
+from ..statistic_analysis import frequency
 
 def show_frequency(log):
     st.subheader("📌 Häufigkeit Analyse")

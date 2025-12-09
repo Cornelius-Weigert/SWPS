@@ -1,5 +1,5 @@
 import streamlit as st
-from statistic_analysis import time_analysis
+from ..statistic_analysis import time_analysis
 
 def show_time(log):
     st.subheader("⌚️Zeit-Analyse")

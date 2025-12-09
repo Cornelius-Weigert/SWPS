@@ -1,18 +1,20 @@
 import streamlit as st
-from display_analysis.frequency import show_frequency
-from display_analysis.numeric import show_numeric
-from display_analysis.duration import show_duration
-from display_analysis.outlier_filter import show_outliers
-from display_analysis.resources import show_resources
-from display_analysis.time import show_time
-from display_analysis.standard_value import show_standard_compare
+from .frequency import show_frequency
+from .numeric import show_numeric
+from .duration import show_duration
+from .outlier_filter import show_outliers
+from .resources import show_resources
+from .time import show_time
+from .standard_value import show_standard_compare
 import pandas as pd
-from display_analysis.duration import show_duration
-from display_analysis. outlier_temporal import show_temporal_outliers
-from display_analysis. outlier_structure import show_structure_outliers
-from display_analysis. outlier_resource import show_resource_outliers
-from display_analysis. outlier_trace import show_trace_outliers
-from display_analysis. outlier_datenattribute import show_datenattribute_outliers
+from .duration import show_duration
+from . outlier_temporal import show_temporal_outliers
+from . outlier_structure import show_structure_outliers
+from . outlier_resource import show_resource_outliers
+from . outlier_trace import show_trace_outliers
+from . outlier_datenattribute import show_datenattribute_outliers
+
+ 
 
 def show_all_analysis(log):
     """
@@ -39,6 +41,14 @@ def show_all_analysis(log):
         
     """
 
+   
+    
+  
+
+############################
+    #if'timestamp' in log.columns:
+    #    log['timestamp'] = pd.to_datetime(log['timestamp'], errors='coerce')
+
     tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tan10,tab11,tab12 = st.tabs([
         "Ausreißer-Temporal", 
         "Ausreißer-Struktur",
@@ -55,6 +65,8 @@ def show_all_analysis(log):
         "Zeit-Analyse",
         
     ])
+
+   
 
     with tab1:
         show_temporal_outliers(log)
@@ -84,7 +96,6 @@ def show_all_analysis(log):
 
     with tab12:
         show_time(log)
-
 
     
 

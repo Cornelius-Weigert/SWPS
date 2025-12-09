@@ -1,11 +1,12 @@
 import streamlit as st
-from statistic_analysis import (
+from ..statistic_analysis import (
     outlier_case_duration,
     outlier_activity_duration,
     outlier_numeric,
     time_analysis,
     duration
 )
+from ..statistic_analysis.outlier_numeric import numeric_outliers
 def show_outliers(log):
 
     st.subheader("❗️ Filter - Case Duration")

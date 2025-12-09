@@ -1,5 +1,5 @@
 import streamlit as st
-from statistic_analysis.outlier_datenattribute import data_attribute_outliers
+from ..statistic_analysis.outlier_datenattribute import data_attribute_outliers
 
 def show_datenattribute_outliers(log):
     

@@ -75,6 +75,8 @@ if darstell_button2:
         #Spalte-Name vereinheitlichen
         log=map_column(log)
 
+        st.session_state["df"]=log
+
         show_all_analysis(log)
     else:
         st.error("Fehler beim Laden der Dateo ")

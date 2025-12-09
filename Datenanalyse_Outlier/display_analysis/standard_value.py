@@ -1,7 +1,7 @@
 import streamlit as st
-from statistic_analysis.standard_compare import compare_with_standardwert
-from statistic_analysis.time_analysis import time_analysis1
-from statistic_analysis.duration import duration_pro_activity
+from ..statistic_analysis.standard_compare import compare_with_standardwert
+from ..statistic_analysis.time_analysis import time_analysis1
+from ..statistic_analysis.duration import duration_pro_activity
 
 def show_standard_compare(log, standard_dict=None,source_col="value"):
     if log is None:
