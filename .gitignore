@@ -2,7 +2,7 @@
 # Eventlogs/
 # If you still want other files in Eventlogs tracked, ignore only xes:
 *.xes
-
+*csv
 # Python virtual environment
 .venv/
 venv/
@@ -22,5 +22,6 @@ Thumbs.db
 # Temporary files
 *.log
 *.tmp
+
 
 BPI_Challenge_2019.xes
