@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from streamlit_elements import elements, mui, nivo
 
+
+
 # ---------------------------------------------------------
 # 1) Outlier-Erkennung (muss noch mit Yaxin ihren Code getauscht werden!)
 # ---------------------------------------------------------
@@ -95,8 +97,7 @@ st.title("Eventlog Analyse mit Outlier-Erkennung & Nivo-Charts")
 
 uploaded = st.file_uploader("Bitte Eventlog hochladen", type=["csv", "xes"])
 if uploaded is not None:
- 
- st.success(f" Datei erfolgreich hochgeladen!")
+    st.success(f" Datei erfolgreich hochgeladen!")
 
 if uploaded:
     # CSV Beispiel
@@ -137,7 +138,7 @@ if uploaded:
     
     # 4) Chart-Daten vorbereiten
     
-    st.subheader("📊 Chart: Anzahl Outlier pro Aktivität")
+    # st.subheader("📊 Chart: Anzahl Outlier pro Aktivität")
 
     if "Activity" in df.columns:
         # Anzahl Outlier pro Aktivität
@@ -159,8 +160,8 @@ if uploaded:
         ]
 
         # Debug-Ausgabe
-        st.write("Daten für Nivo-Chart:")
-        st.write(nivo_data)
+        # st.write("Daten für Nivo-Chart:")
+        # st.write(nivo_data)
 
         
         # 5) Nivo Radar Chart

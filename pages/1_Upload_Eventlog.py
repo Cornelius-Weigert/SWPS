@@ -11,9 +11,7 @@ import Datenanalyse_Outlier.eventlog_to_image as eventlog_to_image
 from pages.map_columns import map_column
 import pm4py
 import pandas as pd
-# from Datenanalyse_Outlier.display_analysis.main import show_all_analysis   
-# from Datenanalyse_Outlier.eventlog_to_dataframe import eventlog_to_df 
-########################################################### 
+
 
 # --- SESSION STATE INITIALISIEREN ---
 if "uploaded_logs" not in st.session_state or st.session_state["uploaded_logs"] is None:

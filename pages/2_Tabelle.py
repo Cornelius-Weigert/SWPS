@@ -14,6 +14,18 @@ from Datenanalyse_Outlier import load_eventLog as load_eventLog
 from streamlit_elements import elements, mui, nivo 
 
 
+# --- SESSION STATE INITIALISIEREN ---
+if "uploaded_logs" not in st.session_state or st.session_state["uploaded_logs"] is None:
+    st.session_state["uploaded_logs"] = []
+
+if not isinstance(st.session_state["uploaded_logs"], list):
+    st.session_state["uploaded_logs"] = list(st.session_state["uploaded_logs"])
+
+st.session_state.setdefault("latest_upload", None)
+st.session_state.setdefault("file_path", None)
+st.session_state.setdefault("file_type", None)
+st.session_state.setdefault("file_name", None)
+
 st.title("🧭 Tabelle - Ausreißeranalyse")
 
 # Prüfen, ob Datei vom Button-Code existiert

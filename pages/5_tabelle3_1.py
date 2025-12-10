@@ -2,6 +2,18 @@ import streamlit as st
 import pandas as pd
 #from analyse_modul import detect_outliers_custom  # dein Teamkollegen-Modul
 
+# --- SESSION STATE INITIALISIEREN ---
+if "uploaded_logs" not in st.session_state or st.session_state["uploaded_logs"] is None:
+    st.session_state["uploaded_logs"] = []
+
+if not isinstance(st.session_state["uploaded_logs"], list):
+    st.session_state["uploaded_logs"] = list(st.session_state["uploaded_logs"])
+
+st.session_state.setdefault("latest_upload", None)
+st.session_state.setdefault("file_path", None)
+st.session_state.setdefault("file_type", None)
+st.session_state.setdefault("file_name", None)
+
 st.set_page_config(page_title="Ausreißer Analyse", layout="wide")
 st.title("🔍 Ausreißer Analyse")
 
