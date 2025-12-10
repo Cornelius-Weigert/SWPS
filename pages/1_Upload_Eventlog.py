@@ -11,8 +11,8 @@ import Datenanalyse_Outlier.eventlog_to_image as eventlog_to_image
 from pages.map_columns import map_column
 import pm4py
 import pandas as pd
-from Datenanalyse_Outlier.display_analysis.main import show_all_analysis   
-from Datenanalyse_Outlier.eventlog_to_dataframe import eventlog_to_df 
+# from Datenanalyse_Outlier.display_analysis.main import show_all_analysis   
+# from Datenanalyse_Outlier.eventlog_to_dataframe import eventlog_to_df 
 ########################################################### 
 
 # --- SESSION STATE INITIALISIEREN ---
@@ -142,25 +142,25 @@ st.bar_chart(df["activity"].value_counts())
 
 
 
-#############################################################
-# --- STATISTISCHE ANALYSE & AUSREISSER ---
-st.subheader("📊 Statistische Analyse & Ausreißer")
+# #############################################################
+# # --- STATISTISCHE ANALYSE & AUSREISSER ---
+# st.subheader("📊 Statistische Analyse & Ausreißer")
 
 
-  # Eventlog->Dataframe
-if not isinstance(log, pd.DataFrame):
-        log_df = eventlog_to_df(log)
-else:
-        log_df = log.copy()
+#   # Eventlog->Dataframe
+# if not isinstance(log, pd.DataFrame):
+#         log_df = eventlog_to_df(log)
+# else:
+#         log_df = log.copy()
 
-st.write(log_df.columns)
-log_df = map_column(log_df)
+# st.write(log_df.columns)
+# log_df = map_column(log_df)
 
-log_df["timestamp"] = pd.to_datetime(log_df["timestamp"], errors="coerce")
+# log_df["timestamp"] = pd.to_datetime(log_df["timestamp"], errors="coerce")
 
-log = log_df
+# log = log_df
 
-show_all_analysis(log)
+# show_all_analysis(log)
 
 
 
