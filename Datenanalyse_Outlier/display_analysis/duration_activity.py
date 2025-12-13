@@ -11,6 +11,7 @@ def show_activity_duration(log):
     act = duration_pro_activity(log)
     if act is not None:
         st.dataframe(act)
+        
 
 
 

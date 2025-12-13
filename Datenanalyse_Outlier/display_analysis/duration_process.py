@@ -10,7 +10,3 @@ def show_process_duration(log):
         st.write("Durchschnittliche Prozessdauer:",durations["Dauer"].mean())
         st.write("Kürzeste Prozessdauer:", durations["Dauer"].min())
         st.write("Längste Prozessdauer", durations["Dauer"].max())
-    
- 
-
-
