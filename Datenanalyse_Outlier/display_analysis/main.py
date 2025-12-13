@@ -1,6 +1,5 @@
 import streamlit as st
 from .frequency import show_frequency
-from .numeric import show_numeric
 from .duration_process import show_process_duration
 from .outlier_filter import show_outliers
 from .resources import show_resources
@@ -28,12 +27,11 @@ def show_all_analysis(log):
         Standardwerte-Vergleich,
         Filter,
         Häufigkeit,
-        
-        Numerisch,
+    
         Prozessdauer,
-       
-        Ressourcen,
         Zeit-Analyse,
+        Ressourcen,
+       
         
     """
 
@@ -45,7 +43,7 @@ def show_all_analysis(log):
     #if'timestamp' in log.columns:
     #    log['timestamp'] = pd.to_datetime(log['timestamp'], errors='coerce')
 
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9= st.tabs([
         "Ausreißer-Temporal", 
         "Ausreißer-Trace",
         "Ausreißer-Ressourcen",
@@ -53,11 +51,9 @@ def show_all_analysis(log):
         "Standardwerte-Vergleich",
 
         "Häufigkeit",
-        "Numerisch",
         "Prozessdauer",
-        "Ressourcen", 
-        "Zeit-Analyse",
-        
+        "Aktivitätsdauer",
+         "Ressourcen", 
     ])
 
    
@@ -78,17 +74,14 @@ def show_all_analysis(log):
     
     with tab6:
         show_frequency(log)
-
-    with tab7:
-        show_numeric(log)
     
-    with tab8:
+    with tab7:
         show_process_duration(log)
-    with tab9:
-        show_resources(log)
+   
 
-    with tab10:
+    with tab8:
         show_activity_duration(log)
 
-    
+    with tab9:
+        show_resources(log)
 

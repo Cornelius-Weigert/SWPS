@@ -31,11 +31,3 @@ def show_standard_compare(log, standard_dict=None,source_col="value"):
 
 
 
-    
-        #  value
-    numeric_cols = log.select_dtypes(include="number").columns
-    for col in numeric_cols:
-        standard_value = log[col].mean()
-        df_std = compare_with_standardwert(log, standard_value, value_col=col)
-        st.subheader(f"📊Value: Standardwerte & Abweichung")
-        st.dataframe(df_std)
