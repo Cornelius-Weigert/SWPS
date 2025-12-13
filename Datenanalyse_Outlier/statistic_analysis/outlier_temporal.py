@@ -1,6 +1,6 @@
 import pandas as pd
 
-def temporal_outliers(log, case_col="case_id", timestamp_col="timestamp"):
+def temporal_outliers(log, case_col="case_id", activity_col="activity", timestamp_col="timestamp"):
     """
     Identifiziert zeitliche Ausreißer in einem Ereignisprotokoll basierend auf der Dauer zwischen aufeinanderfolgenden Aktivitäten.
 
@@ -51,6 +51,8 @@ def temporal_outliers(log, case_col="case_id", timestamp_col="timestamp"):
 
 
 
+    display_cols = [case_col, activity_col, timestamp_col, 'prev_timestamp', 'duration']
+    log = log[display_cols]
 
     return outliers,log
 
