@@ -4,9 +4,9 @@ from ..statistic_analysis import (
     duration_process,
     outlier_case_duration,
     outlier_activity_duration,
-    outlier_numeric
 )
-from ..statistic_analysis.outlier_numeric import numeric_outliers
+
+
 def show_outliers(log):
 
     st.subheader("❗️ Filter - Case Duration")
@@ -43,26 +43,4 @@ def show_outliers(log):
     else:
         st.info("Keine Aktivitätsdauer - Activity Outliers übersprungen.")
 
-    st.subheader("❗️ Filter - Numerische Werte")
-
-    numeric_cols = log.select_dtypes(include="number").columns
-    if len(numeric_cols) == 0:
-        st.info("Keine numerischen Spalten - Numeric Outliers übersprungen.")
-        return
-
-    selected_numeric = st.selectbox(
-        "Numerische Spalte wählen:",
-        numeric_cols
-    )
-
-    st.write("### Quantile Einstellungen für Numeric")
-    lower_num = st.slider("Unteres Quantil (Numeric)", 0.0, 0.5, 0.10, 0.01)
-    upper_num = st.slider("Oberes Quantil (Numeric)", 0.5, 1.0, 0.90, 0.01)
-    factor_num = st.slider("IOR-Faktor (Numeric)", 1.0, 5.0, 1.5, 0.1)
-
-    outliers_numeric, bounds_numeric = outlier_numeric.numeric_outliers(
-        log, selected_numeric, lowerq=lower_num, upperq =upper_num, factor=factor_num
-    )
-    st.write(f"Schwellenwerte: {bounds_numeric}")
-    st.dataframe(outliers_numeric, use_container_width=True)
 

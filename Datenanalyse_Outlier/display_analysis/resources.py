@@ -18,3 +18,9 @@ def show_resources(log):
     counts.plot(kind="bar")
     plt.title(f"Ressourcen für {selected}")
     st.pyplot(fig)
+
+
+
+    st.subheader("📊 Ereignisse pro Ressource")
+
+    st.bar_chart(log_with_counts, x="resource", y="activity_count")       

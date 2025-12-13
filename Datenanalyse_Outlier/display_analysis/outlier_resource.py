@@ -23,8 +23,6 @@ def show_resource_outliers(log):
         else:
             st.write("Keine Ausreißer in dieser Kategorie gefunden.")
 
-    st.subheader("📊 Ereignisse pro Ressource")
-
-    st.bar_chart(log_with_counts, x="resource", y="activity_count")       
+   
 
 
