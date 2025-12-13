@@ -15,9 +15,9 @@ def duration_pro_case(log, case_col="case_id", time_col="timestamp"):
     #!!!
     durations["Dauer"] = durations["last"] - durations["first"]
 
-    print("\n->>> Durchschnittliche Prozessdauer:", durations["Dauer"].mean())
-    print("->>> Kürzeste Prozessdauer:", durations["Dauer"].min())
-    print("->>> Längste Prozessdauer:", durations["Dauer"].max())
+    print("\nDurchschnittliche Prozessdauer:", durations["Dauer"].mean())
+    print("Kürzeste Prozessdauer:", durations["Dauer"].min())
+    print("Längste Prozessdauer:", durations["Dauer"].max())
 
    
 
