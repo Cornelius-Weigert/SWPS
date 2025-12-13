@@ -2,9 +2,7 @@ import sys, os
 ROOT = os.path.dirname(os.path.abspath(__file__))  
 sys.path.append(os.path.join(ROOT, ".."))  
 
-
 import streamlit as st
-import os
 import tempfile
 import Datenanalyse_Outlier.load_eventLog as load_eventLog
 import Datenanalyse_Outlier.eventlog_to_image as eventlog_to_image
@@ -24,6 +22,8 @@ st.session_state.setdefault("latest_upload", None)
 st.session_state.setdefault("file_path", None)
 st.session_state.setdefault("file_type", None)
 st.session_state.setdefault("file_name", None)
+st.session_state.setdefault("df", None)
+st.session_state.setdefault("log", None)
 
 
 # --- Upload Funktion ---
@@ -68,42 +68,41 @@ file_path = st.session_state.get("file_path")
 file_type = st.session_state.get("file_type")
 file_name = st.session_state.get("file_name")
 
-
-# --- Datei einlesen ---
-try:
-    if file_type == "CSV":
-        df = pd.read_csv(file_path)
-        df = map_column(df)
-        log = load_eventLog.eventLog_from_csv(file_path)
-
-        st.session_state["df"] = df
-        st.session_state["log"] = log
-       
-
-
-    elif file_type == "XES":
-        log = pm4py.read_xes(file_path)
-        df = pm4py.convert_to_dataframe(log)
-        df = map_column(df)
-        log = load_eventLog.eventLog_from_xes(file_path)
-
-        st.session_state["df"] = df
-        st.session_state["log"] = log
-        
-
-except Exception as e:
-    st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
-    st.stop()
-
-
 # --- Sicherstellen, dass df existiert ---
 if "df" not in st.session_state:
     st.warning("⚠️ Kein Eventlog geladen.")
     st.stop()
 
-df = st.session_state["df"]
-log = st.session_state["log"]
+if st.session_state.get("df") is None:
+    # --- Datei einlesen ---
+    try:
+        if file_type == "CSV":
+            df = pd.read_csv(file_path)
+            df = map_column(df)
+            log = load_eventLog.eventLog_from_csv(file_path)
 
+            st.session_state["df"] = df
+            st.session_state["log"] = log
+        
+
+
+        elif file_type == "XES":
+            log = pm4py.read_xes(file_path)
+            df = pm4py.convert_to_dataframe(log)
+            df = map_column(df)
+            log = load_eventLog.eventLog_from_xes(file_path)
+
+            st.session_state["df"] = df
+            st.session_state["log"] = log
+            
+
+    except Exception as e:
+        st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
+        st.stop()
+
+else:
+    df = st.session_state["df"]
+    log = st.session_state["log"]
 
 
 # --- STATISTIKEN ---

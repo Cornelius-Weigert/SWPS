@@ -1,10 +1,16 @@
 import streamlit as st
 import pandas as pd
 
-# --- SESSION STATE ---
+# --- SESSION STATE INITIALISIEREN ---
+st.session_state.setdefault("latest_upload", None)
+st.session_state.setdefault("file_path", None)
+st.session_state.setdefault("file_type", None)
+st.session_state.setdefault("file_name", None)
 st.session_state.setdefault("df", None)
+st.session_state.setdefault("log", None)
+# Sonstige Session States für Ausreißer
 st.session_state.setdefault("outlier_total", 0)
-st.session_state.setdefault("outlier_checked", 0)
+st.session_state.setdefault("outlier_checked", 0)  
 st.session_state.setdefault("outliers_accepted", [])
 
 st.title("📑 Bericht - Ausreißeranalyse")

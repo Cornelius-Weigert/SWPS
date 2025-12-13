@@ -27,6 +27,12 @@ st.session_state.setdefault("latest_upload", None)
 st.session_state.setdefault("file_path", None)
 st.session_state.setdefault("file_type", None)
 st.session_state.setdefault("file_name", None)
+st.session_state.setdefault("df", None)
+st.session_state.setdefault("log", None)
+# Sonstige Session States für Ausreißer
+st.session_state.setdefault("outlier_total", 0)
+st.session_state.setdefault("outlier_checked", 0)  
+st.session_state.setdefault("outliers_accepted", [])
 
 st.title("🧭 Tabelle - Ausreißeranalyse")
 
@@ -35,11 +41,13 @@ if "file_path" not in st.session_state or st.session_state["file_path"] is None:
     st.warning("⚠️ Bitte zuerst einen Eventlog auf der Button-Seite hochladen.")
     st.stop()
 
-file_path = st.session_state["file_path"]
-file_type = st.session_state["file_type"]
+# file_path = st.session_state["file_path"]
+# file_type = st.session_state["file_type"]
 
 # --- EVENTLOG EINLESEN ---
 st.header("📄 Eventlog laden")
+df = st.session_state["df"]
+log = st.session_state["log"]
 
 # '''
 # def map_column(df):
@@ -92,25 +100,25 @@ st.header("📄 Eventlog laden")
 # '''
 # df = map_column(df)
 
-try:
-    if file_type == "CSV":
-        df = pd.read_csv(file_path)
-        df = map_column(df)
-        log = load_eventLog.eventLog_from_csv(file_path)
+# try:
+#     if file_type == "CSV":
+#         df = pd.read_csv(file_path)
+#         df = map_column(df)
+#         log = load_eventLog.eventLog_from_csv(file_path)
 
-    elif file_type == "XES":
-        log = pm4py.read_xes(file_path)
-        df = pm4py.convert_to_dataframe(log)
-        df = map_column(df)
-        log = load_eventLog.eventLog_from_xes(file_path)
+#     elif file_type == "XES":
+#         log = pm4py.read_xes(file_path)
+#         df = pm4py.convert_to_dataframe(log)
+#         df = map_column(df)
+#         log = load_eventLog.eventLog_from_xes(file_path)
 
-    else:
-        st.error("❌ Unbekanntes Dateiformat.")
-        st.stop()
+#     else:
+#         st.error("❌ Unbekanntes Dateiformat.")
+#         st.stop()
 
-except Exception as e:
-    st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
-    st.stop()
+# except Exception as e:
+#     st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
+#     st.stop()
 
 st.success("Eventlog erfolgreich geladen!")
 
@@ -185,15 +193,10 @@ else:
 
 
 
-# --- SESSION STATE ---
-st.session_state.setdefault("df", None)
-st.session_state.setdefault("outlier_total", 0)
-st.session_state.setdefault("outlier_checked", 0)  
-st.session_state.setdefault("outliers_accepted", [])
-
 # #############################################################
 #  --- STATISTISCHE ANALYSE & AUSREISSER ---
 st.subheader("📊 Statistische Analyse & Ausreißer")
+
 
 
   # Eventlog->Dataframe
