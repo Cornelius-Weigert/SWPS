@@ -202,7 +202,7 @@ if not isinstance(log, pd.DataFrame):
 else:
     log_df = log.copy()
 
-st.write(log_df.columns)
+# st.write(log_df.columns)
 log_df = map_column(log_df)
 
 log_df["timestamp"] = pd.to_datetime(log_df["timestamp"], errors="coerce")
