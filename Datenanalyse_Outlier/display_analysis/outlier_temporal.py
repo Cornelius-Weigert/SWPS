@@ -2,29 +2,37 @@ import streamlit as st
 from ..statistic_analysis.outlier_temporal import temporal_outliers
 import pandas as pd
 
-
-def deduplicate_columns(log):
+def deduplicate_columns(log_df):
     new_cols = []
     seen = {}
-    for col in log.columns:
+    for col in log_df.columns:
         if col in seen:
             seen[col] += 1
             new_cols.append(f"{col}_{seen[col]}")
         else:
             seen[col] = 0
             new_cols.append(col)
-    log.columns = new_cols
-    return log
+    log_df.columns = new_cols
+    return log_df
 
    
 
-def show_temporal_outliers(log: pd.DataFrame, case_col="case_id", timestamp_col="timestamp", activity_col="activity"):
+def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_col="timestamp", activity_col="activity"):
+    """
+    Show temporal outlier analysis based on activity duration in the Streamlit interface.
+    Args:
+        log_df (pd.DataFrame): The event log as a DataFrame.
+        case_col (str): The name of the case identifier column.
+        timestamp_col (str): The name of the timestamp column.
+        activity_col (str): The name of the activity column.
+    Returns:
+        None
+    """
     st.subheader("❗️ Ausreißer - Zeitlich")
 
-  
-    log = deduplicate_columns(log)
+    log_df = deduplicate_columns(log_df)
 
-    outliers, log_with_duration = temporal_outliers(log, case_col=case_col, timestamp_col=timestamp_col)
+    outliers, log_with_duration = temporal_outliers(log_df, case_col=case_col, timestamp_col=timestamp_col)
 
     # duration auch anzeigen
     for category, indices in outliers.items():
@@ -52,8 +60,7 @@ def show_temporal_outliers(log: pd.DataFrame, case_col="case_id", timestamp_col=
                     if c not in new_cols:
                         new_cols.append(c)
                 
-
-
+                # remove duplicates while preserving order
                 new_cols = [c for i, c in enumerate(new_cols) if c not in new_cols[:i]]
                 if "duration" not in new_cols:
                     new_cols.append("duration")
@@ -79,6 +86,7 @@ def show_temporal_outliers(log: pd.DataFrame, case_col="case_id", timestamp_col=
             if "duration" in outlier_df.columns:
                 outlier_df["duration"] = outlier_df["duration"].round(2)
 
+            # display in dataframe with selectable rows
             st.dataframe(
                 outlier_df, 
                 use_container_width=True,

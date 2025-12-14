@@ -18,7 +18,6 @@ def duration_pro_case(log_df, case_col="case_id", time_col="timestamp"):
     
     case_duration["case_duration"] = (case_duration["last"] - case_duration["first"]).dt.total_seconds() / 60.0  # (Dauer in Minuten)
 
-    standard_case_duration = pd.DataFrame({case_col: case_duration["case_duration"].mean()}, index=[0])
     case_duration = case_duration.reset_index()
 
     return case_duration[[case_col, "case_duration"]]
