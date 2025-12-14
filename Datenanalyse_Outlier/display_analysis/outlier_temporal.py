@@ -89,7 +89,7 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
             # display in dataframe with selectable rows
             st.dataframe(
                 outlier_df, 
-                use_container_width=True,
+                width="stretch",
                 on_select="rerun",
                 selection_mode="multi-row",
                 hide_index=True,)

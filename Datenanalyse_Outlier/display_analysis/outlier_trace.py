@@ -19,7 +19,6 @@ def show_trace_outliers(log_df):
         st.write(f"### Kategorie: {category}")
         if indices:
             outlier_df = log_df.loc[indices]
-            # st.dataframe(outlier_df, use_container_width=True)
         else:
             st.write("Keine Ausreißer in dieser Kategorie gefunden.")
         
@@ -36,4 +35,4 @@ def show_trace_outliers(log_df):
                     + (["case_duration"] if "case_duration" in case_df.columns else []
                        )
             
-                ], use_container_width=True)
+                ], width="stretch")

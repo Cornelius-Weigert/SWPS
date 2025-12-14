@@ -20,6 +20,6 @@ def show_resource_outliers(log_df):
         st.write(f"### Kategorie: {category}")
         if indices:
             outlier_df = log_df.loc[indices, display_cols]
-            st.dataframe(outlier_df, use_container_width=True)
+            st.dataframe(outlier_df, width="stretch")
         else:
             st.write("Keine Ausreißer in dieser Kategorie gefunden.")
