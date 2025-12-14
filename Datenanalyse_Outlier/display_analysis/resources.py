@@ -1,5 +1,4 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 
 def show_resources(log_df, resource_col="resource"):
     """
