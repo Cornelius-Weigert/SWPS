@@ -55,4 +55,4 @@ fig = px.bar(
 fig.update_traces(marker_color="indianred", textposition="outside")
 fig.update_layout(yaxis=dict(dtick=1))
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
