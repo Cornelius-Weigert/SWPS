@@ -14,7 +14,7 @@ def show_resource_outliers(log_df):
 
     display_cols=["case_id","activity","resource","timestamp"]
 
-    outliers = outlier_resources(log_df)
+    outliers, log_with_counts = outlier_resources(log_df)
 
     for category, indices in outliers.items():
         st.write(f"### Kategorie: {category}")

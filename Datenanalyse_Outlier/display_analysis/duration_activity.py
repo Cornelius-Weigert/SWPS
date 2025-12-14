@@ -12,12 +12,24 @@ def show_activity_duration(log_df):
     st.subheader("⌚️Aktivitätsdauer")
 
     st.subheader("🕒 Dauer pro Aktivität")
+
+    # Dauer pro Aktivität anzeigen
     act = duration_pro_activity(log_df)
     if act is not None:
         st.dataframe(act)
-    # Summary statistics for all activities
-    st.write("Durchschnittliche Aktivitätsdauer:",act["Activity_Duration"].mean())
-    st.write("Kürzeste Aktivitätsdauer:", act["Activity_Duration"].min())
-    st.write("Längste Aktivitätsdauer", act["Activity_Duration"].max())
+   
+    #Avg. Min & Max pro Aktivität anzeigen
+    act_summary = act.groupby("activity")["Activity_Duration"].agg(['mean', 'min', 'max']).reset_index()
+    st.subheader("📈 Zusammenfassung pro Aktivität")
+    st.dataframe(act_summary)
 
-    #To Do: Avg. Min & Max pro Aktivität anzeigen
+    st.write("---")
+
+    # Display summary statistics for each activity
+    for _, row in act_summary.iterrows():
+        st.write(f"**Aktivität:** {row['activity']}")
+        st.write(f"Durchschnittliche Dauer: {row['mean']}")
+        st.write(f"Kürzeste Dauer: {row['min']}")
+        st.write(f"Längste Dauer: {row['max']}")
+
+        st.write("---")
