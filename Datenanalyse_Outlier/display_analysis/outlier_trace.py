@@ -35,4 +35,4 @@ def show_trace_outliers(log_df):
                     + (["case_duration"] if "case_duration" in case_df.columns else []
                        )
             
-                ], width="stretch")
+                ], width="stretch",hide_index=True,)

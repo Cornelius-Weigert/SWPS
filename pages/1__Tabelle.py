@@ -35,84 +35,8 @@ st.header("📄 Eventlog laden")
 df = st.session_state["df"]
 log = st.session_state["log"]
 
-# '''
-# def map_column(df):
-#     # Kleinbuchstaben
-#     df.columns = [c.lower() for c in df.columns]
-
-#     # Mapping für notwendige Spalten
-#     col_map = {}
-
-#     # case_id-Spalte
-#     for name in ["case_id", "case", "Case_ID", "Case ID", "Case_id", "case id", "case:concept:name","id","ID", "case ID"]:
-#         if name in df.columns:
-#             col_map[name] = "case_id"
-#             break
-
-#     # activity-Spalte
-#     for name in ["activity", "Activity", "concept_name", "concept:name"]:
-#         if name in df.columns:
-#             col_map[name] = "activity"
-#             break
-
-#     # timestamp-Spalte
-#     for name in ["timestamp", "Complete Timestamp", "Complete timestamp", "complete timestamp", "Timestamp", "time", "time:timestamp"]:
-#         if name in df.columns:
-#             col_map[name] = "timestamp"
-#             break
-
-#     # Resource-Spalte
-#     for name in ["org:resource","resource"]:
-#         if name in df.columns:
-#             col_map[name] = "resource"
-#             break   
-
-#     df = df.rename(columns=col_map)
-    
-#     # Prüfen, ob alle Pflichtspalten jetzt existieren
-#     must_have = {"case_id", "activity", "timestamp"}
-#     if not must_have.issubset(df.columns):
-#         missing = must_have - set(df.columns)
-#         st.error(f"❌ CSV benötigt die Spalten: {', '.join(missing)}")
-#         st.stop()
-
-#     # Timestamp konvertieren
-#     df["timestamp"] = pd.to_datetime(df["timestamp"], errors='coerce')
-#     if df["timestamp"].isnull().all():
-#         st.error("❌ Konnte keine gültigen Zeitstempel erkennen.")
-#         st.stop()
-              
-#     return df
-# '''
-# df = map_column(df)
-
-# try:
-#     if file_type == "CSV":
-#         df = pd.read_csv(file_path)
-#         df = map_column(df)
-#         log = load_eventLog.eventLog_from_csv(file_path)
-
-#     elif file_type == "XES":
-#         log = pm4py.read_xes(file_path)
-#         df = pm4py.convert_to_dataframe(log)
-#         df = map_column(df)
-#         log = load_eventLog.eventLog_from_xes(file_path)
-
-#     else:
-#         st.error("❌ Unbekanntes Dateiformat.")
-#         st.stop()
-
-# except Exception as e:
-#     st.error(f"❌ Fehler beim Einlesen der Datei: {e}")
-#     st.stop()
 
 st.success("Eventlog erfolgreich geladen!")
-
-# --- TABELLENVORSCHAU ---
-st.subheader("📋 Interaktive Tabellen-Vorschau")
-st.dataframe(df.head(30), width='stretch')
-
-st.markdown("---")
 
 # --- AUSREISSER-COUNTER ---
 if "is_outlier" in df.columns:
