@@ -1,7 +1,7 @@
 
 import pandas as pd
 from pm4py.objects.log.obj import EventLog, Trace, Event
-
+import pm4py
 
 
 def eventlog_to_df(log):
@@ -23,7 +23,7 @@ def eventlog_to_df(log):
                 elif hasattr(event, "keys"):
                     rows.append(dict(event))
                 else:
-                    print("WARN: Ungültiges Event:", event)
+                    print("WARNUNG: Ungültiges Event:", event)
 
         log = pd.DataFrame(rows)
         return log

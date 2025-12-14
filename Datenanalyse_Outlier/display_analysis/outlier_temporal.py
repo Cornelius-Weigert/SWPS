@@ -79,6 +79,11 @@ def show_temporal_outliers(log: pd.DataFrame, case_col="case_id", timestamp_col=
             if "duration" in outlier_df.columns:
                 outlier_df["duration"] = outlier_df["duration"].round(2)
 
-            st.dataframe(outlier_df, use_container_width=True)
+            st.dataframe(
+                outlier_df, 
+                use_container_width=True,
+                on_select="rerun",
+                selection_mode="multi-row",
+                hide_index=True,)
         else:
             st.write("Keine Ausreißer in dieser Kategorie gefunden.")
