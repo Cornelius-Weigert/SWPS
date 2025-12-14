@@ -1,12 +1,6 @@
-import streamlit as st
-from .frequency import show_frequency
-from .duration_process import show_process_duration
-from .outlier_filter import adapt_outlier_filter
-from .resources import show_resources
-from .duration_activity import show_activity_duration
-from .standard_value import show_standard_compare
 import pandas as pd
-from .duration_process import show_process_duration
+import streamlit as st
+from .outlier_filter import adapt_outlier_filter
 from . outlier_temporal import show_temporal_outliers
 from . outlier_resource import show_resource_outliers
 from . outlier_trace import show_trace_outliers
@@ -35,16 +29,11 @@ def show_all_analysis(log):
         
     """
   
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9= st.tabs([
+    tab1, tab2, tab3, tab4 = st.tabs([
         "Ausreißer-Temporal", 
         "Ausreißer-Trace",
         "Ausreißer-Ressourcen",
         "Ausreißer-Filter",
-        "Standardwerte-Vergleich",
-        "Häufigkeit",
-        "Prozessdauer",
-        "Aktivitätsdauer",
-         "Ressourcen", 
     ])
 
     with tab1:
@@ -58,19 +47,3 @@ def show_all_analysis(log):
     
     with tab4:
         adapt_outlier_filter(log)
-    
-    with tab5:
-        show_standard_compare(log)
-    
-    with tab6:
-        show_frequency(log)
-    
-    with tab7:
-        show_process_duration(log)
-   
-
-    with tab8:
-        show_activity_duration(log)
-
-    with tab9:
-        show_resources(log)

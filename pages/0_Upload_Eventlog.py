@@ -23,6 +23,10 @@ st.session_state.setdefault("file_type", None)
 st.session_state.setdefault("file_name", None)
 st.session_state.setdefault("df", None)
 st.session_state.setdefault("log", None)
+st.session_state.setdefault("outlier_total", 0)
+st.session_state.setdefault("outlier_checked", 0)
+st.session_state.setdefault("outliers_accepted", pd.DataFrame())
+
 
 
 # --- Upload Funktion ---

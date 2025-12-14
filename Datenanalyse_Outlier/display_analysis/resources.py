@@ -16,10 +16,10 @@ def show_resources(log_df, resource_col="resource"):
         st.info("Keine Ressourcenspalte gefunden.")
         return
     
-    activities = log_df["concept:name"].unique()
+    activities = log_df["activity"].unique()
     selected = st.selectbox("Aktivität wählen", activities)
 
-    sub = log_df[log_df["concept:name"] == selected]
+    sub = log_df[log_df["activity"] == selected]
     counts = sub["resource"].value_counts()
 
     fig = plt.figure()
@@ -27,7 +27,7 @@ def show_resources(log_df, resource_col="resource"):
     plt.title(f"Ressourcen für {selected}")
     st.pyplot(fig)
 
-    log_with_counts = log_df.groupby("resource").agg(activity_count=("concept:name", "count")).reset_index()
+    log_with_counts = log_df.groupby("resource").agg(activity_count=("activity", "count")).reset_index()
 
     st.subheader("📊 Ereignisse pro Ressource")
 
