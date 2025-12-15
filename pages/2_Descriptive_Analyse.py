@@ -13,11 +13,9 @@ from Datenanalyse_Outlier.display_analysis.standard_value import show_standard_c
 from Datenanalyse_Outlier.display_analysis.duration_process import show_process_duration
 
 # --- SESSION STATE INITIALISIEREN ---
-if "uploaded_logs" not in st.session_state or st.session_state["uploaded_logs"] is None:
-    st.session_state["uploaded_logs"] = []
-
-if not isinstance(st.session_state["uploaded_logs"], list):
-    st.session_state["uploaded_logs"] = list(st.session_state["uploaded_logs"])
+if st.session_state.get("df") is None:
+    st.warning("⚠️ Bitte zuerst einen Eventlog auf der \"Upload Eventlog\" Seite hochladen.")
+    st.stop()
 
 df = st.session_state.get("df")
 log = st.session_state.get("log")

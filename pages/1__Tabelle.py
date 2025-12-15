@@ -23,7 +23,7 @@ st.title("🧭 Tabelle - Ausreißeranalyse")
 
 # Prüfen, ob Datei vom Button-Code existiert
 if "file_path" not in st.session_state or st.session_state["file_path"] is None:
-    st.warning("⚠️ Bitte zuerst einen Eventlog auf der Button-Seite hochladen.")
+    st.warning("⚠️ Bitte zuerst einen Eventlog auf der \"Upload Eventlog\" Seite hochladen.")
     st.stop()
 
 # file_path = st.session_state["file_path"]
