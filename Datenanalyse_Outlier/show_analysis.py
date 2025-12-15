@@ -21,26 +21,41 @@ def show_all_analysis(log_df):
         
     log_df = map_column(log_df)
 
+    # Feature-Berechnung 
     duration_activity = duration_pro_activity(log_df)
     duration_process = duration_pro_case(log_df)
+
+    # Outlier-Berechnung auf Features
+    activity_duration = activity_duration_outliers(duration_activity)
+    case_duration = case_duration_outliers(duration_process)
+
+    # Direkt-Analysen
     frequency = frequency1(log_df)
-    activity_duration = activity_duration_outliers(log_df)
-    case_duration = case_duration_outliers(log_df)
     temporal = temporal_outliers(log_df)
     resource = outlier_resources(log_df)
     trace = outlier_trace(log_df)
     standard_compare = compare_with_standardwert(log_df)
+
+    #duration_activity = duration_pro_activity(log_df)
+    #duration_process = duration_pro_case(log_df)
+    #frequency = frequency1(log_df)
+    #activity_duration = activity_duration_outliers(log_df)
+    #case_duration = case_duration_outliers(log_df)
+    #temporal = temporal_outliers(log_df)
+    #resource = outlier_resources(log_df)
+    #trace = outlier_trace(log_df)
+    #standard_compare = compare_with_standardwert(log_df)
     
     # Anzeigen
-    st.dataframe(duration_activity)
-    st.dataframe(duration_process)
-    st.dataframe(frequency)
-    st.dataframe(activity_duration)
-    st.dataframe(case_duration)
-    st.dataframe(temporal)
-    st.dataframe(resource)
-    st.dataframe(trace)
-    st.dataframe(standard_compare)
+    #st.dataframe(duration_activity)
+    #st.dataframe(duration_process)
+    #st.dataframe(frequency)
+    #st.dataframe(activity_duration)
+    #st.dataframe(case_duration)
+    #st.dataframe(temporal)
+    #st.dataframe(resource)
+    #st.dataframe(trace)
+    #st.dataframe(standard_compare)
 
     # Ergebnisse zurückgeben
     return {
