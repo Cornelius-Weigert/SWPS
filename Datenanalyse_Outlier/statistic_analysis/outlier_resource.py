@@ -1,4 +1,5 @@
 import pandas as pd
+import streamlit as st
 
 def outlier_resources(log_df, case_col="case_id", activity_col="activity", resource_col="resource"):
     """
@@ -26,15 +27,27 @@ def outlier_resources(log_df, case_col="case_id", activity_col="activity", resou
     
     #+++++++Wenn eine Ressource ungewöhnlich viele Aktivitäten hat+++++++++++++
     activity_counts = log_df[resource_col].value_counts()
-    threshold = activity_counts.quantile(0.95)  # 95. Perzentil als Schwellenwert
+    #if activity_df is not None:
+    st.subheader("❗️ Filter - Resource_Activity Value")
+    show_res_slider = st.checkbox("Perzentilebasierte Grenzwerte anzeigen ", value = False,key="resource_slider")
+    lower_res=st.session_state['lower_res'] = 0.05
+    upper_res=st.session_state['upper_res'] = 0.95
+    factor_res=st.session_state['factor_res'] = 1.5
+    if show_res_slider:   
+        st.write("Perzentilebasierte Grenzenwerte(Anzahl durchgefürten Aktivitäten pro Resource) ")
+        lower_res = st.slider("Untere Grenze (Resource)", 0.0, 0.5, 0.10, 0.01,help="Der Anzahl von Aktivitäten, der die Resourcen so teilt, dass x% der Resourcen weniger oder gleich diesem Wert treiben(und y% mehr)")
+        upper_res = st.slider("Obere Grenze (Resource)", 0.5, 1.0, 0.90, 0.01,help="Der Anzahl von Aktivitäten, der die Resourcen so teilt, dass y% der Resourcen weniger oder gleich diesem Wert treiben(und x% mehr)")
+        factor_res = st.slider("Faktor (Resource)", 1.0, 5.0, 1.5, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
+        st.session_state['lower_res'] = lower_res
+        st.session_state['upper_res'] = upper_res
+        st.session_state['factor_res'] = factor_res
 
-    high_activity_resources = activity_counts[activity_counts > threshold].index
+    high_activity_resources = activity_counts[activity_counts > upper_res].index
     high_activity_rows = log_df[log_df[resource_col].isin(high_activity_resources)]
     outliers['high-activity-resources'] = high_activity_rows.index.tolist()   
 
     #+++++++Wenn eine Ressource ungewöhnlich wenige Aktivitäten hat+++++++++++++
-    threshold1 = activity_counts.quantile(0.05)  # 5. Perzentil als Schwellenwert
-    low_activity_resources = activity_counts[activity_counts < threshold1].index
+    low_activity_resources = activity_counts[activity_counts < lower_res].index
     low_activity_rows = log_df[log_df[resource_col].isin(low_activity_resources)]
     outliers['low-activity-resources'] = low_activity_rows.index.tolist()   
 
