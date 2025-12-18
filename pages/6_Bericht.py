@@ -19,6 +19,9 @@ st.button("Bericht zurücksetzen", on_click=lambda:st.session_state["outliers_ac
 
 df = st.session_state["df"]
 outliers = st.session_state.get("outliers_accepted")
+
+# To Do: outliers nach Kategorie gruppieren
+
 for i in outliers:
     st.write("---")
     category = i[0]
