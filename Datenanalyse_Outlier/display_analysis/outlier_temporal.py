@@ -1,6 +1,7 @@
 import streamlit as st
 from ..statistic_analysis.outlier_temporal import temporal_outliers
 import pandas as pd
+from ..statistic_analysis.second_to_time import second_to_time
 
 def deduplicate_columns(log_df):
     new_cols = []
@@ -76,15 +77,15 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
                     cols.insert(0, "duration")
                     outlier_df = outlier_df.reindex(columns=cols)
 
-            # Runde die Dauer auf 2 Dezimalstellen
-            #(in minuten!)
+            #ojektiv -> numeric  ->lesbare Zeit
+            if pd.api.types.is_timedelta64_dtype(outlier_df["duration"]):
+                outlier_df["duration"] = outlier_df["duration"].dt.total_seconds()
+            else:
+                outlier_df["duration"] = pd.to_numeric(outlier_df["duration"], errors='coerce')
+            outlier_df["duration"] = outlier_df["duration"].apply(second_to_time)
 
-            #ojektiv -> numeric
-            outlier_df["duration"] = pd.to_numeric(outlier_df["duration"], errors='coerce')
+            outlier_df["standard_activity_duration"]= outlier_df["standard_activity_duration"].apply(second_to_time)
             
-        
-            if "duration" in outlier_df.columns:
-                outlier_df["duration"] = outlier_df["duration"].round(2)
 
             # display in dataframe with selectable rows
             st.dataframe(

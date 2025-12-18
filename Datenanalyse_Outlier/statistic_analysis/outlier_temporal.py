@@ -1,7 +1,7 @@
 import pandas as pd
 from . import duration_activity
 import streamlit as st
-
+from .second_to_time import second_to_time
 if 'lower_act' not in st.session_state:
     st.session_state['lower_act'] = 0.05
 
@@ -29,12 +29,17 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
     #duration rechennen
     log_df = log_df.sort_values(by=[case_col, timestamp_col])
     log_df['prev_timestamp'] = log_df.groupby(case_col)[timestamp_col].shift(1)
-    log_df['duration'] = (log_df[timestamp_col] - log_df['prev_timestamp']).dt.total_seconds() / 60.0  # Dauer in Minuten 
+    log_df['prev_activity'] = log_df.groupby(case_col)[activity_col].shift(1)
+    log_df['next_activity'] = log_df.groupby(case_col)[activity_col].shift(-1)
+    log_df['duration'] = (log_df[timestamp_col] - log_df['prev_timestamp']).dt.total_seconds()
+
 
     # Durchschnittliche Dauer pro Aktivität berechnen und anzeigen
+    log_df['duration'] = pd.to_numeric(log_df['duration'], errors='coerce')
     standard = log_df.groupby(activity_col)['duration'].mean().reset_index()
     standard.columns = [activity_col, 'standard_activity_duration']
     log_df = log_df.merge(standard, on=activity_col, how='left')
+    log_df['standard_activity_duration']=log_df['standard_activity_duration']
     
     outliers = {}
     
@@ -58,15 +63,12 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
 
     activity_df = duration_activity.duration_pro_activity(log_df)
     #if activity_df is not None:
-    show_act_slider = st.checkbox("Quantile Einstellungen an zeigen ", value = False,key="activity_slider")
+    show_act_slider = st.checkbox("Perzentilebasierte Grenzwerte anzeigen ", value = False,key="activity_slider")
     if show_act_slider:   
-        st.write("### Quantile Einstellungen für Activity Duration")
-        lower_act = st.slider("Unteres Quantil (Activity)", 0.0, 0.5, 0.10, 0.01)
-        upper_act = st.slider("Oberes Quantil (Activity)", 0.5, 1.0, 0.90, 0.01)
-        factor_act = st.slider("IQR-Faktor (Activity)", 1.0, 5.0, 1.5, 0.1)
-        # st.session_state.setdefault('lower_act', 0.05)
-        # st.session_state.setdefault('upper_act', 0.95)
-        # st.session_state.setdefault('factor_act', factor_act)
+        st.write("Perzentilbasierte Grenzwerte (Activity Duration)")
+        lower_act = st.slider("Untere Grenze(Activity)", 0.0, 0.5, 0.10, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass x% der Dauern kürzer oder gleich diesem Wert treiben(und y% länger)")
+        upper_act = st.slider("Obere Grenze (Activity)", 0.5, 1.0, 0.90, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass y% der Dauern kürzer oder gleich diesem Wert treiben(und x% länger)")
+        factor_act = st.slider("Faktor (Activity)", 1.0, 5.0, 1.5, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
         st.session_state['lower_act'] = lower_act
         st.session_state['upper_act'] = upper_act
         st.session_state['factor_act'] = factor_act
@@ -85,7 +87,7 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
     outliers['negative-activity-duration'] = negative_duration_rows.index.tolist()
 
     # Nur relevante Spalten für die Anzeige behalten
-    display_cols = [case_col, activity_col, timestamp_col, 'prev_timestamp', 'duration','standard_activity_duration']
+    display_cols = [case_col, 'prev_activity',activity_col,'next_activity', timestamp_col, 'prev_timestamp', 'duration','standard_activity_duration']
     log_df = log_df[display_cols]
 
     return outliers,log_df
