@@ -22,7 +22,7 @@ def show_activity_duration(log_df):
     st.dataframe(act_summary)
 
     st.subheader("🕒 Dauer pro Aktivität")
-    st.write("---")
+    st.write("---") 
     # Display summary statistics for each activity
     for _, row in act_summary.iterrows():
         st.write(f"**Aktivität:** {row['activity']}")

@@ -95,8 +95,8 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
                 selection_mode="multi-row",
                 hide_index=True,)
             
-            ausreißer_akzeptiert = st.button("Ausgewählte Ausreißer akzeptieren", key=f"accept_temporal_{category}") # on_click=accept_outliers, args=(outliers.selection.rows, category,outlier_df))
-            if ausreißer_akzeptiert:
+            ausreißer_akzeptiert_button = st.button("Ausgewählte Ausreißer akzeptieren", key=f"accept_temporal_{category}")
+            if ausreißer_akzeptiert_button:
                 accept_outliers(outliers.selection.rows, category,outlier_df)
         else:
             st.write("Keine Ausreißer in dieser Kategorie gefunden.")
