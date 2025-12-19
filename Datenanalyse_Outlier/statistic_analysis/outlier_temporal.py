@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 from .second_to_time import second_to_time
-from ..filter import show_activity_duration_filter
  
 def temporal_outliers(log_df, case_col="case_id", activity_col="activity", timestamp_col="timestamp"):
     """
