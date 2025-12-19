@@ -1,7 +1,7 @@
 import pandas as pd
-from . import duration_activity
 import streamlit as st
 from .second_to_time import second_to_time
+from ..filter import show_activity_duration_filter
  
 def temporal_outliers(log_df, case_col="case_id", activity_col="activity", timestamp_col="timestamp"):
     """
@@ -50,23 +50,6 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
     outliers['missing-timestamp'] = missing_timestamp_rows.index.tolist()  
 
     #++++++++Wenn die Dauer zwischen Aktivitäten ungewöhnlich lang ist+++++++++++++
-    st.subheader("❗️ Filter - Activity Duration")
-
-    activity_df = duration_activity.duration_pro_activity(log_df)
-    #if activity_df is not None:
-    show_act_slider = st.checkbox("Perzentilebasierte Grenzwerte anzeigen ", value = False,key="activity_slider")
-    lower_act=st.session_state['lower_act'] = 0.05
-    upper_act=st.session_state['upper_act'] = 0.95
-    factor_act=st.session_state['factor_act'] = 1.5
-    if show_act_slider:   
-        st.write("Perzentilbasierte Grenzwerte (Activity Duration)")
-        lower_act = st.slider("Untere Grenze(Activity)", 0.0, 0.5, 0.10, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass x% der Dauern kürzer oder gleich diesem Wert treiben(und y% länger)")
-        upper_act = st.slider("Obere Grenze (Activity)", 0.5, 1.0, 0.90, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass y% der Dauern kürzer oder gleich diesem Wert treiben(und x% länger)")
-        factor_act = st.slider("Faktor (Activity)", 1.0, 5.0, 1.5, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
-        st.session_state['lower_act'] = lower_act
-        st.session_state['upper_act'] = upper_act
-        st.session_state['factor_act'] = factor_act
-
     long_duration_threshold = log_df['duration'].quantile(st.session_state['upper_act'])
     long_duration_rows = log_df[log_df['duration'] > long_duration_threshold]
     outliers['long-activity-duration'] = long_duration_rows.index.tolist()
