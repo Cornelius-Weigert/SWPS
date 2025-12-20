@@ -4,7 +4,7 @@ from ..statistic_analysis.duration_process import duration_pro_case
 from ..statistic_analysis.duration_activity import duration_pro_activity
 from ..statistic_analysis.second_to_time import second_to_time
 
-def show_standard_compare(log, standard_dict=None,source_col="value"):
+def show_standard_compare(log):
     """
     Show standard value comparison analysis in the Streamlit interface.
     Args:
@@ -22,7 +22,7 @@ def show_standard_compare(log, standard_dict=None,source_col="value"):
     durations=duration_pro_case(log)
     if durations is not None:
         standard_duration=durations["case_duration"].mean()
-        df_standard= compare_with_standardwert(durations,standard_duration, value_col="case_duration")
+        df_standard= compare_with_standardwert(durations,standard_duration, value_col="case_duration",id_col="case_id")
 
         # standard_duration_time=second_to_time(standard_duration)
         df_standard["case_duration"]=df_standard["case_duration"].apply(second_to_time)
@@ -36,7 +36,7 @@ def show_standard_compare(log, standard_dict=None,source_col="value"):
     activity_durations=duration_pro_activity(log)
     if activity_durations is not None:
         standard_activity = activity_durations["Activity_Duration"].mean()
-        df_activity_standard = compare_with_standardwert(activity_durations, standard_activity, value_col="Activity_Duration")
+        df_activity_standard = compare_with_standardwert(activity_durations, standard_activity, value_col="Activity_Duration",event_col="activity")
 
         df_activity_standard["Activity_Duration"]=df_activity_standard["Activity_Duration"].apply(second_to_time)
         standard_activity_time=second_to_time(standard_activity)
