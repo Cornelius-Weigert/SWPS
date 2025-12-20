@@ -47,8 +47,3 @@ with tab4:
 
 with tab5:
     show_resources(df)
-
-# Sessionstate für Outlier
-from Datenanalyse_Outlier.show_analysis import show_all_analysis
-
-st.session_state["outliers"] = show_all_analysis(st.session_state["log"])

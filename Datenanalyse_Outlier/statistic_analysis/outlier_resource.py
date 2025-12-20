@@ -1,4 +1,5 @@
 import pandas as pd
+import streamlit as st
 
 def outlier_resources(log_df, case_col="case_id", activity_col="activity", resource_col="resource"):
     """
@@ -26,15 +27,13 @@ def outlier_resources(log_df, case_col="case_id", activity_col="activity", resou
     
     #+++++++Wenn eine Ressource ungewöhnlich viele Aktivitäten hat+++++++++++++
     activity_counts = log_df[resource_col].value_counts()
-    threshold = activity_counts.quantile(0.95)  # 95. Perzentil als Schwellenwert
 
-    high_activity_resources = activity_counts[activity_counts > threshold].index
+    high_activity_resources = activity_counts[activity_counts > st.session_state['upper_res']].index
     high_activity_rows = log_df[log_df[resource_col].isin(high_activity_resources)]
     outliers['high-activity-resources'] = high_activity_rows.index.tolist()   
 
     #+++++++Wenn eine Ressource ungewöhnlich wenige Aktivitäten hat+++++++++++++
-    threshold1 = activity_counts.quantile(0.05)  # 5. Perzentil als Schwellenwert
-    low_activity_resources = activity_counts[activity_counts < threshold1].index
+    low_activity_resources = activity_counts[activity_counts < st.session_state['lower_res']].index
     low_activity_rows = log_df[log_df[resource_col].isin(low_activity_resources)]
     outliers['low-activity-resources'] = low_activity_rows.index.tolist()   
 

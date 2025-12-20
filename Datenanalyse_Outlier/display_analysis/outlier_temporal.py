@@ -1,7 +1,10 @@
 import streamlit as st
 from ..statistic_analysis.outlier_temporal import temporal_outliers
 import pandas as pd
+from ..statistic_analysis.second_to_time import second_to_time
 from .outlier_acception import accept_outliers
+from ..statistic_analysis import duration_activity
+
 
 def deduplicate_columns(log_df):
     new_cols = []
@@ -29,9 +32,23 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
     Returns:
         None
     """
-    st.subheader("❗️ Ausreißer - Zeitlich")
-    st.session_state["outliers_temporal"] = []
-    log_df = deduplicate_columns(log_df)
+    #filter 
+    st.subheader("🌟 Filter - Activity Duration")
+    activity_df = duration_activity.duration_pro_activity(log_df)
+    #if activity_df is not None:
+    show_act_slider = st.checkbox("Perzentilebasierte Grenzwerte anzeigen ", value = False,key="actvity_slider")
+    lower_act=st.session_state['lower_act'] = 0.05
+    upper_act=st.session_state['upper_act'] = 0.95
+    factor_act=st.session_state['factor_act'] = 1.5
+    if show_act_slider:   
+        st.write("Perzentilbasierte Grenzwerte (Activity Duration)")
+        lower_act = st.slider("Untere Grenze(Activity)", 0.0, 0.5, lower_act, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass x% der Dauern kürzer oder gleich diesem Wert treiben(und y% länger)")
+        upper_act = st.slider("Obere Grenze (Activity)", 0.5, 1.0, upper_act, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass y% der Dauern kürzer oder gleich diesem Wert treiben(und x% länger)")
+        factor_act = st.slider("Faktor (Activity)", 1.0, 5.0, factor_act, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
+        st.session_state['lower_act'] = lower_act
+        st.session_state['upper_act'] = upper_act
+        st.session_state['factor_act'] = factor_act
+
 
     outliers, log_with_duration = temporal_outliers(log_df, case_col=case_col)
 
@@ -77,15 +94,15 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
                     cols.insert(0, "duration")
                     outlier_df = outlier_df.reindex(columns=cols)
 
-            # Runde die Dauer auf 2 Dezimalstellen
-            #(in minuten!)
+            #ojektiv -> numeric  ->lesbare Zeit
+            if pd.api.types.is_timedelta64_dtype(outlier_df["duration"]):
+                outlier_df["duration"] = outlier_df["duration"].dt.total_seconds()
+            else:
+                outlier_df["duration"] = pd.to_numeric(outlier_df["duration"], errors='coerce')
+            outlier_df["duration"] = outlier_df["duration"].apply(second_to_time)
 
-            #ojektiv -> numeric
-            outlier_df["duration"] = pd.to_numeric(outlier_df["duration"], errors='coerce')
+            outlier_df["standard_activity_duration"]= outlier_df["standard_activity_duration"].apply(second_to_time)
             
-        
-            if "duration" in outlier_df.columns:
-                outlier_df["duration"] = outlier_df["duration"].round(2)
 
             # display in dataframe with selectable rows
             outliers = st.dataframe(
@@ -95,8 +112,8 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
                 selection_mode="multi-row",
                 hide_index=True,)
             
-            ausreißer_akzeptiert = st.button("Ausgewählte Ausreißer akzeptieren", key=f"accept_temporal_{category}") # on_click=accept_outliers, args=(outliers.selection.rows, category,outlier_df))
-            if ausreißer_akzeptiert:
+            ausreißer_akzeptiert_button = st.button("Ausgewählte Ausreißer akzeptieren", key=f"accept_temporal_{category}")
+            if ausreißer_akzeptiert_button:
                 accept_outliers(outliers.selection.rows, category,outlier_df)
         else:
             st.write("Keine Ausreißer in dieser Kategorie gefunden.")

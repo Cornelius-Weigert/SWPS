@@ -2,15 +2,6 @@ import pandas as pd
 import streamlit as st
 from . import duration_process
 
-if 'lower_case' not in st.session_state:
-    st.session_state['lower_case'] = 0.05
-
-if 'upper_case' not in st.session_state:
-    st.session_state['upper_case'] = 0.95
-
-if 'factor_case' not in st.session_state:
-    st.session_state['factor_case'] = 1.5
-
 def outlier_trace(log_df, case_col="case_id"):
     """
     Detect outliers in traces based on various criteria.
@@ -20,25 +11,8 @@ def outlier_trace(log_df, case_col="case_id"):
     Returns:
         dict: Dictionary containing lists of outlier trace indices for each criterion.
     """
-    #+++++++Wenn der Trace ungewöhnlich lang ist+++++++++++++
     outliers = {}
-    st.subheader("❗️ Filter - Case Duration")
-
-    case_duration = duration_process.duration_pro_case(log_df)
-    #if case_duration is not None and not case_duration.empty:
-    show_case_slider = st.checkbox("Quantile Einstellungen an zeigen ", value = False,key="case_slider")
-    if show_case_slider:
-        st.write("### Quantile Einstellungen für Case Duration")
-        lower_case = st.slider("Unteres Quantil (Case)", 0.0, 0.5, 0.10, 0.01)
-        upper_case = st.slider("Oberes Quantil (Case)", 0.5, 1.0, 0.90, 0.01)
-        factor_case = st.slider("IQR-Faktor (Case)", 1.0, 5.0, 1.5, 0.1)
-        # st.session_state.setdefault('lower_case', 0.05)
-        # st.session_state.setdefault('upper_case', 0.95)
-        # st.session_state.setdefault('factor_case', factor_case)
-        st.session_state['lower_case'] = lower_case
-        st.session_state['upper_case'] = upper_case
-        st.session_state['factor_case'] = factor_case
-     
+    #+++++++Wenn der Trace ungewöhnlich lang ist+++++++++++++
     trace_lengths = log_df.groupby(case_col).size()
     length_threshold = trace_lengths.quantile(st.session_state['upper_case']) 
     long_trace_cases = trace_lengths[trace_lengths > length_threshold].index

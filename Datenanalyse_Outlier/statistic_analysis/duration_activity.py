@@ -1,3 +1,4 @@
+from .second_to_time import second_to_time
 def duration_pro_activity(log_df, case_col="case_id", event_col="activity", time_col="timestamp"):
     """
     Calculate the duration of each activity in the log.
@@ -16,8 +17,10 @@ def duration_pro_activity(log_df, case_col="case_id", event_col="activity", time
     activity_df["next_time"] = activity_df.groupby(case_col)[time_col].shift(-1)
     #duration 
     activity_df["Activity_Duration"] = activity_df["next_time"] - activity_df[time_col]
-    #->in Minuten
-    activity_df["Activity_Duration"] = activity_df["Activity_Duration"].dt.total_seconds() / 60.0
+    #->in Sekunde
+    activity_df["Activity_Duration"] = activity_df["Activity_Duration"].dt.total_seconds()
+    #->lesbare Zeit
+    activity_df["Activity_Duration_time"] = activity_df["Activity_Duration"].apply(second_to_time)
 
     #standard duration pro Aktivität(durchschnitt)
     standard_activity_duration = activity_df.groupby(event_col)["Activity_Duration"].mean().reset_index()
@@ -28,5 +31,5 @@ def duration_pro_activity(log_df, case_col="case_id", event_col="activity", time
         how="left"
     )
 
-    #return activity_df[[case_col, event_col, "Activity_Duration", "standard_activity_duration"]]
+
     return activity_df
