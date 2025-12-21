@@ -37,7 +37,7 @@ def show_trace_outliers(log_df):
     activity_df = duration_pro_activity(log_df)
 
     for category, indices in outliers.items():
-        with st.expander(f"### Kategorie: {category}"):
+        with st.expander(f"### Kategorie: {category} | Anzahl Cases: {len(set(log_df.loc[indices, 'case_id']))}"):
             if indices:
                 outlier_df = log_df.loc[indices]
             else:
