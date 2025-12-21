@@ -74,4 +74,5 @@ def show_trace_outliers(log_df):
                             ["activity","resource","timestamp","Activity_Duration_time"]]
                         , width="stretch",hide_index=True)
                     # DFG Bild
-                    st.graphviz_chart(create_trace_graph(case_df))
+                    st.button("Trace visualisieren",on_click=st.graphviz_chart(create_trace_graph(case_df)))
+                    
