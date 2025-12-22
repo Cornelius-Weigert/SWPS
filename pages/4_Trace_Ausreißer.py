@@ -1,6 +1,4 @@
 import streamlit as st
-import pandas as pd
-import pm4py
 from Datenanalyse_Outlier import eventlog_to_image as eventlog_to_image
 from Datenanalyse_Outlier import load_eventLog as load_eventLog 
 from Datenanalyse_Outlier.display_analysis.outlier_trace import show_trace_outliers
