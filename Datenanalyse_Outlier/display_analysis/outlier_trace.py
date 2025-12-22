@@ -28,10 +28,12 @@ def _render_single_trace(category, case_id, case_df):
         if trace_visualize_button:
             st.graphviz_chart(create_trace_graph(case_df))
         # Akzeptieren Button für Ausreißer
-        comment = st.text_area("Kommentar zu diesem Ausreißer eingeben",key=f"comment_trace_outliers_{case_id}_{category}")
+        comment = st.text_area("(Optional) Kommentar zu diesem Ausreißer eingeben",key=f"comment_trace_outliers_{case_id}_{category}")
         accept_comment = st.button("Kommentar bestätigen & Ausreißer akzeptieren", key=f"confirm_accept_trace_{case_id}_{category}")
         if accept_comment:
             # ToDo add outlier logic
+            case_df["Kommentar"] = comment
+            st.session_state["trace_outliers_accepted"].append([category,case_df])
             st.success(f"✅ Ausreißer für Case ID '{case_id}' in der Kategorie '{category}' wurde akzeptiert.") 
 
 
