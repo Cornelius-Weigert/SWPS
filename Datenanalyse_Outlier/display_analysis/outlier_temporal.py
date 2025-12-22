@@ -32,8 +32,6 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
     """
     #filter 
     st.subheader("🌟 Filter - Activity Duration")
-    activity_df = duration_activity.duration_pro_activity(log_df)
-    #if activity_df is not None:
     show_act_slider = st.checkbox("Perzentilebasierte Grenzwerte anzeigen ", value = False,key="actvity_slider")
     lower_act =st.session_state['lower_act']
     upper_act=st.session_state['upper_act']
@@ -91,7 +89,7 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
                     cols.insert(0, "duration")
                     outlier_df = outlier_df.reindex(columns=cols)
 
-            #ojektiv -> numeric  ->lesbare Zeit
+            # ojektiv -> numeric  ->lesbare Zeit
             if pd.api.types.is_timedelta64_dtype(outlier_df["duration"]):
                 outlier_df["duration"] = outlier_df["duration"].dt.total_seconds()
             else:
