@@ -13,10 +13,7 @@ required_keys = [
 ]
 
 st.button("Bericht zurücksetzen", on_click=lambda:st.session_state["outliers_accepted"].clear())
-# for key in required_keys:
-#     if key not in st.session_state:
-#         st.warning("Bitte zuerst Ausreißer-Analyse durchführen, bevor Bericht geladen werden kann")
-#         st.stop()
+
 
 # Sicherheitscheck für df (falls leer)
 df = st.session_state.get("df")
@@ -31,6 +28,8 @@ if not outliers:
     st.stop()
 
 # To Do: outliers nach Kategorie gruppieren
+grouped_outliers = grouped_outliers(outliers)
+
 for idx, i in enumerate(outliers):
     st.write("---")
     category = i[0]
