@@ -35,7 +35,8 @@ def _render_single_trace(category, case_id, case_df):
             # ToDo add outlier logic
             case_df["Kommentar"] = comment
             st.session_state["trace_outliers_accepted"].append([category,case_df])
-            st.success(f"✅ Ausreißer für Case ID '{case_id}' in der Kategorie '{category}' wurde akzeptiert.") 
+            st.success(f"✅ Ausreißer für Case ID '{case_id}' in der Kategorie '{category}' wurde akzeptiert.")
+            st.session_state["outlier_accepted"] += 1
 
 
 def show_trace_outliers(log_df):

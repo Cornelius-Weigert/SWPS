@@ -1,19 +1,25 @@
 import streamlit as st
 
+
+with open("Dashboard_log/d_log.txt", "r+") as dashboard_log: # first line safes accepted outliers, second line safes uploaded logs
+    lines = dashboard_log.readlines()
+    if not lines:
+        st.session_state["uploaded_logs"] = []
+        st.session_state["outlier_accepted"] = 0
+        st.session_state["latest_upload"] = "Keine Uploads"
+    else:
+        if "outlier_accepted" in st.session_state:
+            dashboard_log.seek(0)
+            lines[0] = str(st.session_state["outlier_accepted"]) + "\n"
+            dashboard_log.writelines(lines)
+            dashboard_log.truncate()
+
+        st.session_state["outlier_accepted"] = int(lines[0].strip()) if lines else 0
+        st.session_state["uploaded_logs"] = eval(lines[1].strip()) if len(lines) > 1 else []
+        st.session_state["latest_upload"] = st.session_state["uploaded_logs"][-1] if st.session_state["uploaded_logs"] else "Keine Uploads"
+
 st.set_page_config(page_title="Dashboard", layout="wide")
 
-# Session state auf leer setzen, wenn Seite gestartet wird 
-if "uploaded_logs" not in st.session_state:
-    st.session_state["uploaded_logs"] = []
-
-if "outlier_accepted" not in st.session_state:
-    st.session_state["outlier_accepted"] = 0
-
-if "outlier_checked" not in st.session_state:
-    st.session_state["outlier_checked"] = False
-
-if "latest_upload" not in st.session_state:
-    st.session_state["latest_upload"] = None
 
 # --- Kopfzeile ---
 st.title("🏠 Dashboard")
