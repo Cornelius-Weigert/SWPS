@@ -18,4 +18,4 @@ def show_process_duration(log_df):
         min_case=case_duration["case_duration"].min()
         st.write("Kürzeste Prozessdauer:", second_to_time(min_case))
         max_case=case_duration["case_duration"].max()
-        st.write("Längste Prozessdauer", second_to_time(max_case))
+        st.write("Längste Prozessdauer:", second_to_time(max_case))
