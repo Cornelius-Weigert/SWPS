@@ -134,11 +134,22 @@ num_events = len(df)
 num_activities = df["activity"].nunique()
 timespan = df["timestamp"].max() - df["timestamp"].min()
 
+total_seconds = int(timespan.total_seconds())
+
+days = total_seconds // 86400
+hours = (total_seconds % 86400) // 3600
+minutes = (total_seconds % 3600) // 60
+seconds = total_seconds % 60
+if days > 0:
+    display = f"{days} d {hours} hrs {minutes} min {seconds} sec"
+else: 
+    display = f"{hours} hrs {minutes} min {seconds} sec"
+
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Cases", num_cases)
 col2.metric("Events", num_events)
 col3.metric("Activities", num_activities)
-col4.metric("Period", str(timespan))
+col4.metric("Period", display)
 
 st.markdown("---")
 
