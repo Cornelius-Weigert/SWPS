@@ -19,7 +19,6 @@ def deduplicate_columns(log_df):
     log_df.columns = new_cols
     return log_df
 
-   
 
 def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_col="timestamp", activity_col="activity"):
     """
@@ -34,8 +33,6 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
     """
     #filter 
     st.subheader("🌟 Filter - Activity Duration")
-    activity_df = duration_activity.duration_pro_activity(log_df)
-    #if activity_df is not None:
     show_act_slider = st.checkbox("Perzentilebasierte Grenzwerte anzeigen ", value = False,key="actvity_slider")
     lower_act =st.session_state['lower_act']
     upper_act=st.session_state['upper_act']
@@ -96,7 +93,7 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
                     cols.insert(0, "duration")
                     outlier_df = outlier_df.reindex(columns=cols)
 
-            #ojektiv -> numeric  ->lesbare Zeit
+            # ojektiv -> numeric  ->lesbare Zeit
             if pd.api.types.is_timedelta64_dtype(outlier_df["duration"]):
                 outlier_df["duration"] = outlier_df["duration"].dt.total_seconds()
             else:
@@ -105,17 +102,17 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
 
             outlier_df["standard_activity_duration"]= outlier_df["standard_activity_duration"].apply(second_to_time)
             
-
             # display in dataframe with selectable rows
             outliers = st.dataframe(
                 outlier_df, 
                 width="stretch",
                 on_select="rerun",
                 selection_mode="multi-row",
-                hide_index=True,)
-            comment = st.text_area("(optional) Kommentar zu ausgewählten Ausreißern eingeben",key=f"comment_temporal_{category}")
+                hide_index=True,
+                key=f"df_temporal_outliers_{category}")
+            comment = st.text_input("(optional) Kommentar zu ausgewählten Ausreißern eingeben",key=f"comment_temporal_{category}")
             ausreißer_akzeptiert_button = st.button("Ausgewählte Ausreißer akzeptieren", key=f"accept_temporal_{category}")
             if ausreißer_akzeptiert_button:
-                accept_outliers(outliers.selection.rows, category,outlier_df,comment)
+                accept_outliers(outliers.selection.rows,category,outlier_df,comment,"temporal")
         else:
             st.write("Keine Ausreißer in dieser Kategorie gefunden.")
