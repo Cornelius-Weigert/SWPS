@@ -110,6 +110,10 @@ if st.session_state.get("df") is None:
 
             st.session_state["df"] = df
             st.session_state["log"] = log
+        
+        # Dashboard Log aktualisieren
+        with open("Dashboard_log/d_log.txt", "w+") as dashboard_log:
+            dashboard_log.writelines([str(st.session_state["outlier_total"]) + "\n", str(st.session_state["uploaded_logs"])])
             
 
     except Exception as e:

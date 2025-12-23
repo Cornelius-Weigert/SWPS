@@ -8,3 +8,4 @@ def accept_outliers(selected_rows, category,outlier_df,comment,outlier_type):
     filtered_outlier_df["Kommentar"] = comment
     st.session_state["outliers_accepted"].append([category, filtered_outlier_df, outlier_type])
     st.success(f"✅ {len(filtered_outlier_df)} Ausreißer in der Kategorie '{category}' wurden akzeptiert.")
+    st.session_state["outlier_accepted"] += len(filtered_outlier_df)

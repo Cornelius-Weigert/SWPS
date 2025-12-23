@@ -1,0 +1,2 @@
+10
+['Sepsis Cases - Event Log.xes', 'finale_with_outliers.csv', 'event_log.xes', 'BPIC15_1.xes', 'BPIC15_1.xes']
