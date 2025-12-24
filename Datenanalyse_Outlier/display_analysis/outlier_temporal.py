@@ -38,16 +38,15 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
     upper_act=st.session_state['upper_act']
     factor_act=st.session_state['factor_act']
     if show_act_slider: 
-        st.write("Perzentilbasierte Grenzwerte (Activity Duration)")
-        lower_act = st.slider("Untere Grenze(Activity)", 0.0, 0.5, lower_act, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass x% der Dauern kürzer oder gleich diesem Wert treiben(und y% länger)")
-        upper_act = st.slider("Obere Grenze (Activity)", 0.5, 1.0, upper_act, 0.01,help="Der Anzahl von Aktivität-Dauer, der die Dauern so teilt, dass y% der Dauern kürzer oder gleich diesem Wert treiben(und x% länger)")
-        factor_act = st.slider("Faktor (Activity)", 1.0, 5.0, factor_act, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
+        st.write("Perzentilbasierte Grenzwerte (Activitätsdauer)")
+        lower_act = st.slider("Untere Grenze (Kurze-Aktivitätsdauer)", 0.0, 0.5, lower_act, 0.01,help="Legt das untere Perzentil der Aktivitätsdauern fest. Dauern unterhalb dieses Werts gelten als ungewöhnlich kurz und werden als zeitliche Ausreißer markiert.")
+        upper_act = st.slider("Obere Grenze (Lange-Aktivitätsdauer)", 0.5, 1.0, upper_act, 0.01,help="Legt das obere Perzentil der Aktivitätsdauern fest. Dauern oberhalb dieses Werts gelten als ungewöhnlich lang und werden als zeitliche Ausreißer markiert.")
+        factor_act = st.slider("Faktor (Aktivitätsdauer)", 1.0, 5.0, factor_act, 0.1,help="Multiplikativer Faktor zur Feinjustierung der Ausreißererkennung. Höhere Werte führen zu einer strengeren, niedrigere Werte zu einer sensibleren Identifikation von Ausreißern. (Ein häufig verwendeter Faktor ist 1,5)")
         st.session_state['lower_act'] = lower_act
         st.session_state['upper_act'] = upper_act
         st.session_state['factor_act'] = factor_act
 
-
-    outliers, log_with_duration = temporal_outliers(log_df, case_col=case_col)
+    outliers,log_with_duration = temporal_outliers(log_df,case_col=case_col)
 
     # duration auch anzeigen
     for category, indices in outliers.items():
@@ -56,9 +55,8 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
             st.caption(OUTLIER_DESCRIPTIONS[category]["description"])
 
         if indices:
-            outlier_df = log_with_duration.loc[indices].copy()
+            outlier_df = log_with_duration.loc[indices]
 
-            
             if "duration" not in outlier_df.columns:
                 outlier_df["duration"] = pd.NA
 
@@ -82,7 +80,6 @@ def show_temporal_outliers(log_df: pd.DataFrame, case_col="case_id", timestamp_c
                 if "duration" not in new_cols:
                     new_cols.append("duration")
                
-
                 new_cols = [c for c in new_cols if c in outlier_df.columns]
                 outlier_df = outlier_df.reindex(columns=new_cols)
             else:

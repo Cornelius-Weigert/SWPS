@@ -21,10 +21,10 @@ def show_resource_outliers(log_df):
 
     if show_res_slider:   
         st.write("Perzentilebasierte Grenzenwerte(Anzahl durchgefürten Aktivitäten pro Resource) ")
-        lower_res = st.slider("Untere Grenze (Resource)", 0.0, 0.5, lower_res, 0.01,help="Der Anzahl von Aktivitäten, der die Resourcen so teilt, dass x% der Resourcen weniger oder gleich diesem Wert treiben(und y% mehr)")
-        upper_res = st.slider("Obere Grenze (Resource)", 0.5, 1.0, upper_res, 0.01,help="Der Anzahl von Aktivitäten, der die Resourcen so teilt, dass y% der Resourcen weniger oder gleich diesem Wert treiben(und x% mehr)")
-        upper_res_diverse=st.slider("Obere Grenze(Vielfalt der Aktivitäten pro Ressource)",0.5,1.0,upper_res_diverse,0.01,help="Quantilesgrenze zur Identifikation von Ressourcen, die eine ungewöhnlich große Anzahl unterschiedlicher Aktivitäten ausführen.")
-        factor_res = st.slider("Faktor (Resource)", 1.0, 5.0,factor_res, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
+        lower_res = st.slider("Untere Grenze (Ressource-wenig-aktiv)", 0.0, 0.5, lower_res, 0.01,help="Bestimmt das untere Perzentil der Anzahl ausgeführter Aktivitäten pro Ressource. Ressourcen unterhalb dieses Werts werden als potenzielle Ausreißer mit ungewöhnlich geringer Aktivitätsauslastung betrachtet.")
+        upper_res = st.slider("Obere Grenze (Ressource-sehr-aktiv)", 0.5, 1.0, upper_res, 0.01,help="Bestimmt das obere Perzentil der Anzahl ausgeführter Aktivitäten pro Ressource. Ressourcen oberhalb dieses Werts werden als potenzielle Ausreißer mit ungewöhnlich hoher Aktivitätsauslastung betrachtet.")
+        upper_res_diverse=st.slider("Obere Grenze (Ressource-vielfältige-Aktivitäten)",0.5,1.0,upper_res_diverse,0.01,help="Legt das Perzentil fest, ab dem Ressourcen als Ausreißer gelten, weil sie eine ungewöhnlich große Anzahl unterschiedlicher Aktivitäten ausführen. Beispiel: 0,95 bedeutet, dass nur die 5 % der Ressourcen mit der höchsten Aktivitätsvielfalt als Ausreißer markiert werden.")
+        factor_res = st.slider("Faktor (Ressource)", 1.0, 5.0,factor_res, 0.1,help="Multiplikativer Faktor zur Feinjustierung der Ausreißererkennung. Höhere Werte führen zu einer strengeren, niedrigere Werte zu einer sensibleren Identifikation von Ausreißern. (Ein häufig verwendeter Faktor ist 1,5)")
         
         st.session_state['lower_res'] = lower_res
         st.session_state['upper_res'] = upper_res

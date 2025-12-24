@@ -51,16 +51,27 @@ def show_trace_outliers(log_df):
     st.subheader("🌟 Filter - Case Duration")
     case_duration = duration_process.duration_pro_case(log_df)
     show_case_slider = st.checkbox("Perzentilebasierte Grenzwerte anzeigen ", value = False,key="case_slider")
+    #initialize
+    if 'upper_case' not in st.session_state: st.session_state['upper_case'] = 0.95
+    if 'lower_case' not in st.session_state: st.session_state['lower_case'] = 0.05
+    if 'upper_case_diverse' not in st.session_state: st.session_state['upper_case_diverse'] = 0.95
+    if 'lower_case_diverse' not in st.session_state: st.session_state['lower_case_diverse'] = 0.05
     lower_case=st.session_state['lower_case']
     upper_case=st.session_state['upper_case']
+    lower_case_diverse=st.session_state['lower_case_diverse']
+    upper_case_diverse=st.session_state['upper_case_diverse']
     factor_case=st.session_state['factor_case']
     if show_case_slider:
             st.write("Perzentilebasierte Grenzenwerte(Case Duration)")
-            lower_case = st.slider("Untere Grenze (Case)", 0.0, 0.5, lower_case, 0.01,help="Der Anzahl von Case-Dauer, der die Dauern so teilt, dass x% der Dauern kürzer oder gleich diesem Wert treiben(und y% länger)")
-            upper_case = st.slider("Obere Grenze (Case)", 0.5, 1.0,upper_case, 0.01,help="Der Anzahl von Case-Dauer, der die Dauern so teilt, dass y% der Dauern kürzer oder gleich diesem Wert treiben(und x% länger)")
-            factor_case = st.slider("Faktor (Case)", 1.0, 5.0, factor_case, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
+            lower_case = st.slider("Untere Grenze (Lange-Traces)", 0.0, 0.5, lower_case, 0.01,help="Legt das untere Perzentil der Trace-Längen fest. Traces mit weniger Ereignissen als dieser Schwellenwert werden als ungewöhnlich kurz und als Ausreißer markiert.")
+            upper_case = st.slider("Obere Grenze (Kurze-Traces)", 0.5, 1.0,upper_case, 0.01,help="Legt das obere Perzentil der Trace-Längen fest. Traces mit mehr Ereignissen als dieser Schwellenwert werden als ungewöhnlich lang und damit als Ausreißer betrachtet.")
+            lower_case_diverse = st.slider("Untere Grenze (Tracese-wenige-Aktivitäten)", 0.0, 0.5, lower_case_diverse, 0.01,help="Legt das untere Perzentil der Anzahl unterschiedlicher Aktivitäten pro Trace fest. Traces unterhalb dieses Werts weisen eine ungewöhnlich hohe Aktivitätsvielfalt auf und werden als Ausreißer betrachtet.")
+            upper_case_diverse = st.slider("Obere Grenze (Traces-viele-Aktivitäten)", 0.5, 1.0,upper_case_diverse, 0.01,help="Legt das obere Perzentil der Anzahl unterschiedlicher Aktivitäten pro Trace fest. Traces oberhalb dieses Werts weisen eine ungewöhnlich hohe Aktivitätsvielfalt auf und werden als Ausreißer betrachtet.")
+            factor_case = st.slider("Faktor (Trace)", 1.0, 5.0, factor_case, 0.1,help="Multiplikativer Faktor zur Feinjustierung der Ausreißererkennung. Höhere Werte führen zu einer strengeren, niedrigere Werte zu einer sensibleren Identifikation von Ausreißern. (Ein häufig verwendeter Faktor ist 1,5)")
             st.session_state['lower_case'] = lower_case
             st.session_state['upper_case'] = upper_case
+            st.session_state['lower_case_diverse'] = lower_case_diverse
+            st.session_state['upper_case_diverse'] = upper_case_diverse
             st.session_state['factor_case'] = factor_case
 
 

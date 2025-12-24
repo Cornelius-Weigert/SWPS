@@ -16,7 +16,7 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
     """
     log_df[timestamp_col] = pd.to_datetime(log_df[timestamp_col], errors='coerce')
     
-    #duration rechennen
+    #duration rechnen
     log_df = log_df.sort_values(by=[case_col, timestamp_col])
     log_df['prev_timestamp'] = log_df.groupby(case_col)[timestamp_col].shift(1)
     log_df['prev_activity'] = log_df.groupby(case_col)[activity_col].shift(1)
@@ -26,10 +26,10 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
 
     # Durchschnittliche Dauer pro Aktivität berechnen und anzeigen
     log_df['duration'] = pd.to_numeric(log_df['duration'], errors='coerce')
-    standard = log_df.groupby(activity_col)['duration'].mean().reset_index()
-    standard.columns = [activity_col, 'standard_activity_duration']
+    standard = log_df.groupby(activity_col)['duration'].mean().rename('standard_activity_duration').reset_index()
+    # standard.columns = [activity_col, 'standard_activity_duration']
     log_df = log_df.merge(standard, on=activity_col, how='left')
-    log_df['standard_activity_duration']=log_df['standard_activity_duration']
+    # log_df['standard_activity_duration']=log_df['standard_activity_duration']
     
     outliers = {}
     
@@ -63,7 +63,7 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
     outliers['Negative_Aktivitätsdauer'] = negative_duration_rows.index.tolist()
 
     # Nur relevante Spalten für die Anzeige behalten
-    display_cols = [case_col, 'prev_activity',activity_col,'next_activity', timestamp_col, 'prev_timestamp', 'duration','standard_activity_duration']
+    display_cols = [case_col, 'prev_activity',activity_col,'next_activity', timestamp_col, 'prev_timestamp','standard_activity_duration']
     log_df = log_df[display_cols]
 
     return outliers,log_df

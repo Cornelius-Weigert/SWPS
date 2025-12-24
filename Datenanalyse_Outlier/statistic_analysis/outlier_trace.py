@@ -30,13 +30,13 @@ def outlier_trace(log_df, case_col="case_id"):
 
     #+++++++Wenn der Trace zu viele verschiedene Aktivitäten hat+++++++++++++
     trace_activity_counts = log_df.groupby(case_col)['activity'].nunique()
-    diverse_activity_cases = trace_activity_counts[trace_activity_counts > trace_activity_counts.quantile(0.95)].index
+    diverse_activity_cases = trace_activity_counts[trace_activity_counts > trace_activity_counts.quantile(st.session_state['upper_case_diverse'])].index
     diverse_activity_rows = log_df[log_df[case_col].isin(diverse_activity_cases)]
     outliers['Traces_viele_Aktivitäten'] = diverse_activity_rows.index.tolist()  
    
 
     #+++++++Wenn der Trace zu wenige verschiedene Aktivitäten hat+++++++++++++
-    uniform_activity_cases = trace_activity_counts[trace_activity_counts < trace_activity_counts.quantile(0.05)].index
+    uniform_activity_cases = trace_activity_counts[trace_activity_counts < trace_activity_counts.quantile(st.session_state['lower_case_diverse'])].index
     uniform_activity_rows = log_df[log_df[case_col].isin(uniform_activity_cases)]
     outliers['Traces_wenig_Aktivitäten'] = uniform_activity_rows.index.tolist()  
 
