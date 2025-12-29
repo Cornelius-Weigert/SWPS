@@ -21,10 +21,10 @@ def show_resource_outliers(log_df):
 
     if show_res_slider:   
         st.write("Perzentilebasierte Grenzenwerte(Anzahl durchgefürten Aktivitäten pro Resource) ")
-        lower_res = st.slider("Untere Grenze (Resource)", 0.0, 0.5, lower_res, 0.01,help="Der Anzahl von Aktivitäten, der die Resourcen so teilt, dass x% der Resourcen weniger oder gleich diesem Wert treiben(und y% mehr)")
-        upper_res = st.slider("Obere Grenze (Resource)", 0.5, 1.0, upper_res, 0.01,help="Der Anzahl von Aktivitäten, der die Resourcen so teilt, dass y% der Resourcen weniger oder gleich diesem Wert treiben(und x% mehr)")
-        upper_res_diverse=st.slider("Obere Grenze(Vielfalt der Aktivitäten pro Ressource)",0.5,1.0,upper_res_diverse,0.01,help="Quantilesgrenze zur Identifikation von Ressourcen, die eine ungewöhnlich große Anzahl unterschiedlicher Aktivitäten ausführen.")
-        factor_res = st.slider("Faktor (Resource)", 1.0, 5.0,factor_res, 0.1,help="Ein häufig verwendeter Faktor (meist 1,5), um Ausreißer zu identifizieren")
+        lower_res = st.slider("Untere Grenze (Ressource-wenig-aktiv)", 0.0, 0.5, lower_res, 0.01,help="Bestimmt das untere Perzentil der Anzahl ausgeführter Aktivitäten pro Ressource. Ressourcen unterhalb dieses Werts werden als potenzielle Ausreißer mit ungewöhnlich geringer Aktivitätsauslastung betrachtet.")
+        upper_res = st.slider("Obere Grenze (Ressource-sehr-aktiv)", 0.5, 1.0, upper_res, 0.01,help="Bestimmt das obere Perzentil der Anzahl ausgeführter Aktivitäten pro Ressource. Ressourcen oberhalb dieses Werts werden als potenzielle Ausreißer mit ungewöhnlich hoher Aktivitätsauslastung betrachtet.")
+        upper_res_diverse=st.slider("Obere Grenze (Ressource-vielfältige-Aktivitäten)",0.5,1.0,upper_res_diverse,0.01,help="Legt das Perzentil fest, ab dem Ressourcen als Ausreißer gelten, weil sie eine ungewöhnlich große Anzahl unterschiedlicher Aktivitäten ausführen. Beispiel: 0,95 bedeutet, dass nur die 5 % der Ressourcen mit der höchsten Aktivitätsvielfalt als Ausreißer markiert werden.")
+        factor_res = st.slider("Faktor (Ressource)", 1.0, 5.0,factor_res, 0.1,help="Multiplikativer Faktor zur Feinjustierung der Ausreißererkennung. Höhere Werte führen zu einer strengeren, niedrigere Werte zu einer sensibleren Identifikation von Ausreißern. (Ein häufig verwendeter Faktor ist 1,5)")
         
         st.session_state['lower_res'] = lower_res
         st.session_state['upper_res'] = upper_res
@@ -43,33 +43,46 @@ def show_resource_outliers(log_df):
         if category in OUTLIER_DESCRIPTIONS:
             st.caption(OUTLIER_DESCRIPTIONS[category]["description"])
 
-        if indices:
-            outlier_df = log_df.loc[indices, display_cols]
+        if not indices:
+            st.write("Keine Ausreißer in dieser Kategorie gefunden.")
+            continue
 
-            if category == "diverse-activity-resources":
-                outlier_df = outlier_df.merge(
-                    resource_unique_activity_counts,
-                    on="resource",
-                    how="left"
-                )
-            else:
-                outlier_df = outlier_df.merge(
-                    resource_activity_count,
-                    on="resource",
-                    how="left"
-                )
+        if category == "Ressource_vielfältige_Aktivitäten":
+            temp_df= log_df.loc[indices, display_cols]
+            outlier_df= temp_df.merge(resource_unique_activity_counts,on="resource", how="left")
+            temp_col="unique_activity_count"
+            label="Anzahl unterschiedlicher Aktivitäten:"
+        else:
+            temp_df=log_df.loc[indices, display_cols]
+            outlier_df= temp_df.merge(resource_activity_count,on="resource", how="left")
+            temp_col="resource_activity_count"
+            label="Anzahl ausgeführter Aktivitäten:"
 
-            selectable_outliers = st.dataframe(
-                outlier_df, 
+        for resource, res_df in outlier_df.groupby("resource"):
+            value = res_df[temp_col].iloc[0]
+            key_df=f"df_{category}_{resource}"
+            key_comment=f"comment_{category}_{resource}"
+            key_button=f"accept_{category}_{resource}"
+
+            res_df_display=res_df[["case_id","activity","timestamp"]]
+            with st.expander(
+                f"👤 Ressource: {resource} ({label} {value})",
+                expanded=False
+            ):
+
+                selectable_outliers = st.dataframe(
+                res_df_display,
+                key=key_df,
                 width="stretch",
                 on_select="rerun",
                 selection_mode="multi-row",
                 hide_index=True)
-            comment = st.text_area("(optional) Kommentar zu ausgewählten Ausreißern eingeben",key=f"comment_temporal_{category}")
-            ausreißer_akzeptiert_button = st.button("Ausgewählte Ausreißer akzeptieren", key=f"accept_temporal_{category}")
-            if ausreißer_akzeptiert_button:
-                accept_outliers(selectable_outliers.selection.rows,category,outlier_df,comment,"resource")
-                selectable_outliers.selection.clear()
-        else:
-            st.write("Keine Ausreißer in dieser Kategorie gefunden.")
+                comment = st.text_area("(optional) Kommentar zu ausgewählten Ausreißern eingeben",key=key_comment)
+                ausreißer_akzeptiert_button = st.button("Ausgewählte Ausreißer akzeptieren", key=key_button)
+                if ausreißer_akzeptiert_button:
+                    accept_outliers(selectable_outliers.selection.rows,category,outlier_df,comment,"resource")
+                    selectable_outliers.selection.clear()
+
+
+    
 

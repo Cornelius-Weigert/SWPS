@@ -36,7 +36,7 @@ def outlier_resources(log_df, case_col="case_id", activity_col="activity", resou
     outliers['Ressource_sehr_aktiv'] = high_activity_rows.index.tolist()   
 
     #+++++++Wenn eine Ressource ungewöhnlich wenige Aktivitäten hat+++++++++++++
-    lower_res=st.session_state.get("upper_res",0.05)
+    lower_res=st.session_state.get("lower_res",0.05)
     lower_threshold=activity_counts.quantile(lower_res)
 
     low_activity_resources = activity_counts[activity_counts < lower_threshold].index

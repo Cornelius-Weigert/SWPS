@@ -11,7 +11,8 @@ OUTLIER_DESCRIPTIONS = {
 
     "Ressource_wenig_aktiv": {
         "description": "Diese Ressource kommt im Event Log nur sehr selten vor. "
-                       "Dies kann auf eine Sonderrolle oder auf fehlende Daten hindeuten."
+                       "Dies kann auf eine Sonderrolle oder auf fehlende Date"
+                       "n hindeuten."
     },
 
     "Ressource_vielfältige_Aktivitäten": {
@@ -31,7 +32,7 @@ OUTLIER_DESCRIPTIONS = {
 
     "Lange_Aktivitätsdauer": {
         "description": "Die Zeit zwischen zwei aufeinanderfolgenden Aktivitäten ist ungewöhnlich lang "
-                       "im Vergleich zu ähnlichen Prozessinstanzen."
+                       "im Vergleich zu ähnlichen Aktivitätinstanzen."
     },
 
     "Kurze_Aktivitätsdauer": {
@@ -45,12 +46,12 @@ OUTLIER_DESCRIPTIONS = {
     },
 
     "Lange_Traces": {
-        "description": "Diese Prozessinstanzen enthalten deutlich mehr Events als üblich "
-                       "und können auf Schleifen oder Sonderfälle hindeuten."
+        "description": "Diese Prozessinstanzrn enthalten deutlich mehr Events als üblich "
+                       "und könnte auf Schleifen oder Sonderfälle hindeuten."
     },
 
     "Kurze_Traces": {
-        "description": "Diese Traces enthalten sehr wenige Events und könnten unvollständig oder abgebrochen sein."
+        "description": "Diese Traces enthalten sehr wenige Events, könnte unvollständig oder abgebrochen sein."
     },
 
     "Traces_viele_Aktivitäten": {
