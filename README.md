@@ -25,8 +25,8 @@ Stelle sicher, dass Python 3.9+ installiert ist.
 ### Installation
 1. Repository klonen:
    ```bash
-   git clone [https://github.com/Cornelius-Weigert/SWPS.git](https://github.com/Cornelius-Weigert/SWPS.git)
-   cd SWPS
+   git clone [https://github.com/Cornelius-Weigert/SWPS.git](https://github.com/Cornelius-Weigert/IDOEL.git)
+   cd IDOEL
 
 2. Abhängigkeiten installieren:
    ```bash
