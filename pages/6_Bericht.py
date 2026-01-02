@@ -8,7 +8,7 @@ from streamlit_elements import elements, nivo, mui
 import re
 from Datenanalyse_Outlier.map_columns import map_column
 
-def grouped_outliers(outliers):
+def grouped_outliers(outliers,has_type=True):
     """
     Group outliers by category and concatenate their dataframes.
     Args:
@@ -20,7 +20,25 @@ def grouped_outliers(outliers):
         return []
     grouped_temporal = {}
     grouped_resource = {}
-    for category, df, outlier_type in outliers:
+    # for category, df, outlier_type in outliers:
+    #     if outlier_type == "temporal":
+    #         if category in grouped_temporal:
+    #             grouped_temporal[category] = pd.concat([grouped_temporal[category], df], ignore_index=True)
+    #         else:
+    #             grouped_temporal[category] = df.copy()
+    #     elif outlier_type == "resource":
+    #         if category in grouped_resource:
+    #             grouped_resource[category] = pd.concat([grouped_resource[category], df], ignore_index=True)
+    #         else:
+    #             grouped_resource[category] = df.copy()    
+    # return list(grouped_temporal.items()), list(grouped_resource.items())
+    for item in outliers:
+        if has_type:
+            category, df, outlier_type = item
+        else:
+            category, df = item
+            outlier_type = "resource"
+
         if outlier_type == "temporal":
             if category in grouped_temporal:
                 grouped_temporal[category] = pd.concat([grouped_temporal[category], df], ignore_index=True)
@@ -30,8 +48,10 @@ def grouped_outliers(outliers):
             if category in grouped_resource:
                 grouped_resource[category] = pd.concat([grouped_resource[category], df], ignore_index=True)
             else:
-                grouped_resource[category] = df.copy()    
+                grouped_resource[category] = df.copy()
+
     return list(grouped_temporal.items()), list(grouped_resource.items())
+
 
 def grouped_outliers_trace(outliers):
     """
@@ -49,12 +69,13 @@ def grouped_outliers_trace(outliers):
             grouped[category] = df.copy()
     return list(grouped.items())
 
-def comment_and_download_section(df, category, outlier_type):
+def comment_and_download_section(df, category, outlier_type,resource=None):
+    resource_str=f"_{resource}"if resource else ""
     # Kommentar Funktion zu jeder Kategorie
     comment = st.text_area(
         "Kommentar zu dieser Kategorie",
         value = st.session_state.get(f"comment_{outlier_type}_{category}",""),
-        key = f"comment_{outlier_type}_{category}",
+        key = f"comment_{outlier_type}_{category}{resource_str}",
         height=100
         )
     # CSV für Kategorie inklusive Kommentar
@@ -69,7 +90,7 @@ def comment_and_download_section(df, category, outlier_type):
         data=csv_buffer.getvalue(),
         file_name=f"bericht_{category}.csv",
         mime="text/csv",
-        key=f"download_{outlier_type}_{category}"
+        key=f"download_{outlier_type}_{category}{resource_str}"
         )
 
 st.title("📑 Bericht - Ausreißeranalyse")
@@ -89,17 +110,20 @@ if df is None:
 # Sicherheitscheck für outliers (falls leer)
 outliers = st.session_state.get("outliers_accepted",[])
 trace_outliers = st.session_state.get("trace_outliers_accepted",[])
+resource_outliers=st.session_state.get("resource_outliers_accepted",[])
 grouped_trace_outliers = []
 grouped_temporal_outliers = []
 grouped_resource_outliers = []
 
-if len(outliers) == 0 and len(trace_outliers) == 0:
+if len(outliers) == 0 and len(trace_outliers) == 0 and len(resource_outliers)==0:
     st.info("Es wurden noch keine Ausreißer für den Bericht ausgewählt!")
     st.stop()
 if len(outliers) > 0:
     grouped_temporal_outliers, grouped_resource_outliers = grouped_outliers(outliers)
 if len(trace_outliers) > 0:
     grouped_trace_outliers = grouped_outliers_trace(trace_outliers)
+if len(resource_outliers)>0:
+    _,grouped_resource_outliers= grouped_outliers(resource_outliers, has_type=False)
 
 # Anzeige der akzeptierten trace Ausreißer
 for i in grouped_trace_outliers: # i[0] = category, i[1] = df
@@ -119,12 +143,32 @@ for i in grouped_trace_outliers: # i[0] = category, i[1] = df
                 st.graphviz_chart(create_trace_graph(case_df))
     comment_and_download_section(i[1], category, "Trace")
 
-# Anzeige der akzeptierten Resource Ausreißer
-for i in grouped_resource_outliers:
-    category = i[0]
+# #Anzeige der akzeptierten Resource Ausreißer
+# for i in grouped_resource_outliers:
+#     category = i[0]
+#     st.subheader(f"Akzeptierte Ressourcen Ausreißer - {category}")
+#     st.dataframe(i[1], width="stretch",hide_index=True,)
+#     comment_and_download_section(i[1], category, "Ressource")
+
+# Anzeige der akzeptierten Resource Ausreißer 
+grouped_resource_outliers = st.session_state.get("resource_outliers_accepted",[])
+for category, df_all in grouped_resource_outliers:
+    resource= df_all["resource"].iloc[0]
+    # category=i[0]
+    st.write("---")
     st.subheader(f"Akzeptierte Ressourcen Ausreißer - {category}")
-    st.dataframe(i[1], width="stretch",hide_index=True,)
-    comment_and_download_section(i[1], category, "Ressource")
+    for resource, res_df in df_all.groupby("resource"):
+        # comment = i[1]["Kommentar"].iloc[0] if "Kommentar" in i[1].columns else ""
+        # Resource fragment
+        with st.expander(f"Ressource: {resource} | Anzahl Activities: {len(res_df)}", expanded=False):
+            # Tabelle: alle Events dieser Resource
+            st.dataframe(
+                res_df[["case_id", "activity", "timestamp"]],hide_index=True,width="stretch",key = f"df_{category}_{resource}")
+            # Barchart: Aktivitätsverteilung
+            activity_counts = res_df.groupby("activity").size().reset_index(name="count")
+            st.caption("📊 Aktivitätsverteilung dieser Ressource")
+            st.bar_chart(activity_counts.set_index("activity")["count"])            
+            comment_and_download_section(res_df, category, "Ressource",resource)
     
 # Konvertierung von der Zeit wegen Anzeigenproblemen 
 def duration_string_to_seconds(duration_str):
