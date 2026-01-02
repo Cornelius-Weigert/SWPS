@@ -16,7 +16,6 @@ In der Praxis scheitern Process-Mining-Analysen oft an mangelnder Datenqualität
 * **Experten-Validierung:** Intuitive UI zur Entscheidung über das Vorhandensein von Ausreißern.
 * **Daten-Reparatur:** Export von bereinigten Logs für valide Analyseergebnisse.
 
----
 
 ## 🚀 Quick Start
 
@@ -38,15 +37,12 @@ Starte die Streamlit-App mit folgendem Befehl:
     ```bash
     streamlit run Dashboard.py
 
----
 
 ## 🛠 Technologie-Stack
 
 * **Backend:** Python
 * **Frontend:** [Streamlit](https://streamlit.io/) (Web-Framework)
 * **Datenverarbeitung:** Pandas, PM4Py (Process Mining for Python)
-
----
 
 ## 🧬 Workflow in IDOEL
 
