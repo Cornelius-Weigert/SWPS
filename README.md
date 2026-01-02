@@ -28,18 +28,15 @@ Stelle sicher, dass Python 3.9+ installiert ist.
    ```bash
    git clone [https://github.com/Cornelius-Weigert/SWPS.git](https://github.com/Cornelius-Weigert/SWPS.git)
    cd SWPS
-   ´´´
 
 2. Abhängigkeiten installieren:
    ```bash
    pip install pm4py pandas streamlit
-   ´´´
 
 3. Anwendung starten
 Starte die Streamlit-App mit folgendem Befehl:
     ```bash
     streamlit run Dashboard.py
-    ´´´
 
 ---
 
@@ -48,7 +45,6 @@ Starte die Streamlit-App mit folgendem Befehl:
 * **Backend:** Python
 * **Frontend:** [Streamlit](https://streamlit.io/) (Web-Framework)
 * **Datenverarbeitung:** Pandas, PM4Py (Process Mining for Python)
-* **Detektion:** Scikit-Learn / Statistische Methoden
 
 ---
 
