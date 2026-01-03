@@ -22,6 +22,7 @@ Thumbs.db
 # Temporary files
 *.log
 *.tmp
+d_log.txt
 
 
 BPI_Challenge_2019.xes
