@@ -1,5 +1,6 @@
 import streamlit as st
 from .second_to_time import second_to_time
+import pandas as pd
 
 @st.cache_data
 def duration_pro_activity(log_df, case_col="case_id", event_col="activity", time_col="timestamp"):
@@ -13,8 +14,17 @@ def duration_pro_activity(log_df, case_col="case_id", event_col="activity", time
      Returns:
         pd.DataFrame: DataFrame with activity durations and standard durations.
     """
+    activity_df = log_df.copy()
+    activity_df[time_col] = pd.to_datetime(activity_df[time_col], errors="coerce")
+    activity_df[time_col]=activity_df[time_col].dt.tz_localize(None)
+    activity_df = log_df.sort_values(by=[case_col, time_col])
 
-    activity_df = log_df.sort_values(by=[case_col, time_col]).copy()
+    activity_df = activity_df[
+        ~(
+            (activity_df[event_col] == activity_df.groupby(case_col)[event_col].shift(1)) &
+            (activity_df[time_col] == activity_df.groupby(case_col)[time_col].shift(1))
+        )
+    ]
 
     #next timestamp
     activity_df["next_time"] = activity_df.groupby(case_col)[time_col].shift(-1)

@@ -30,6 +30,7 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
     # standard.columns = [activity_col, 'standard_activity_duration']
     log_df = log_df.merge(standard, on=activity_col, how='left')
     # log_df['standard_activity_duration']=log_df['standard_activity_duration']
+
     
     outliers = {}
     
@@ -63,7 +64,8 @@ def temporal_outliers(log_df, case_col="case_id", activity_col="activity", times
     outliers['Negative_Aktivitätsdauer'] = negative_duration_rows.index.tolist()
 
     # Nur relevante Spalten für die Anzeige behalten
-    display_cols = [case_col, 'prev_activity',activity_col,'next_activity', timestamp_col, 'prev_timestamp','standard_activity_duration']
+    display_cols = [case_col, 'prev_activity',activity_col,'next_activity', timestamp_col, 'prev_timestamp','duration','standard_activity_duration']
     log_df = log_df[display_cols]
+
 
     return outliers,log_df
