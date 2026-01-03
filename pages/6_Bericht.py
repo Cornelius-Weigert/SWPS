@@ -3,10 +3,6 @@ import pandas as pd
 from io import StringIO
 from Datenanalyse_Outlier.statistic_analysis.second_to_time import second_to_time
 from Datenanalyse_Outlier.display_analysis.outlier_trace import create_trace_graph
-from Datenanalyse_Outlier.statistic_analysis import temporal_outliers
-from streamlit_elements import elements, nivo, mui
-import re
-from Datenanalyse_Outlier.map_columns import map_column
 
 def grouped_outliers(outliers,has_type=True):
     """
@@ -103,10 +99,7 @@ df = st.session_state.get("df")
 if df is None:
     st.warning("Bitte zuerst Ausreißeranalyse durchführen!")
     st.stop()
-
-# für die Anzeige der case_id in der Graphik, funktioniert aber noch nicht so richtig
-# df = map_column(df.copy())    
-
+    
 # Sicherheitscheck für outliers (falls leer)
 outliers = st.session_state.get("outliers_accepted",[])
 trace_outliers = st.session_state.get("trace_outliers_accepted",[])
@@ -168,89 +161,11 @@ if resource_outliers:
                 st.caption("📊 Aktivitätsverteilung dieser Ressource")
                 st.bar_chart(activity_counts.set_index("activity")["count"])            
         comment_and_download_section(df_all, category, outlier_type="Ressource")
-    
-# Konvertierung von der Zeit wegen Anzeigenproblemen 
-def duration_string_to_seconds(duration_str):
-    if not isinstance(duration_str, str):
-        return None
-    pattern = r'(?:(\d+)mo)?\s*(?:(\d+)d)?\s*(?:(\d+)h)?\s*(?:(\d+)s)?'
-    match = re.match(pattern, duration_str.strip())
-    if not match:
-        return None
-    months, days, hours, seconds = match.groups(default="0")
-    return int(months)*30*24*3600 + int(days)*24*3600 + int(hours)*3600 + int(seconds)
 
-# Temporale Ausreißer: Button für Nivo-Chart
-for category, data_df in grouped_temporal_outliers:
+# Anzeige der akzeptierten zeitlichen Ausreißer    
+for i in grouped_temporal_outliers:
     st.write("---")
-    # Anzeige Tabelle + Name Kategorie
-    st.subheader(f"Akzeptierte Zeitliche Ausreißer - {category}")
-    st.dataframe(data_df, width="stretch",hide_index=True,)
-    # Kommentar und Download
-    comment_and_download_section(data_df, category, "Zeitlich")
-
-    chart_key = f"show_chart_{category}"
-    if chart_key not in st.session_state: 
-        st.session_state[chart_key] = False
-    
-    if st.button(f"📊 Zeitliche Ausreißer visualisieren ({category})", key=f"chart_btn_{category}"):
-        st.session_state[chart_key] = not st.session_state[chart_key]
-    if st.session_state[chart_key]:
-        scatter_data = []
-        
-        for _, row in data_df.iterrows():
-            # 1. Zeitstempel (X-Achse)
-            ts = row.get("timestamp")
-            
-            # 2. Dauer (Y-Achse) - Wir nehmen die Spalte aus deinem Beispiel
-            dur_raw = row.get("standard_activity_duration")
-            
-            if pd.isna(ts) or dur_raw is None or dur_raw == "-":
-                continue
-                
-            try:
-                # X-Achse konvertieren
-                ts_dt = pd.to_datetime(ts)
-                ts_iso = ts_dt.strftime("%Y-%m-%dT%H:%M:%S")
-                
-                # Y-Achse konvertieren
-                sec = 0
-                if isinstance(dur_raw, str):
-                    # Reinigung: Pandas mag 'min' nicht, es will 'm' oder 'mins'
-                    clean_dur = dur_raw.replace("min", "m")
-                    try:
-                        sec = pd.to_timedelta(clean_dur).total_seconds()
-                    except:
-                        # Falls das auch scheitert, probieren wir deine Regex-Funktion
-                        sec = duration_string_to_seconds(dur_raw) or 0
-                else:
-                    sec = float(dur_raw)
-                
-                # In Minuten umrechnen
-                dur_sec = sec 
-                
-                if dur_sec > 0:
-                    scatter_data.append({
-                        "x": ts_iso, 
-                        "y": round(float(dur_sec), 2)
-                    })
-            except:
-                continue
-
-        if scatter_data:
-            safe_id = re.sub(r'\W+', '', category)
-            with elements(f"scatter_elements_{safe_id}"):
-                with mui.Box(sx={"height": 450, "width": "100%"}):
-                    nivo.ScatterPlot(
-                        data=[{"id": str(category), "data": scatter_data}],
-                        xScale={"type": "time", "format": "%Y-%m-%dT%H:%M:%S", "useUTC": False},
-                        xFormat="time:%Y-%m-%d %H:%M",
-                        yScale={"type": "linear", "min": "auto", "max": "auto"},
-                        margin={"top": 40, "right": 50, "bottom": 80, "left": 70},
-                        useMesh=True,
-                        colors={"scheme": "nivo"},
-                        axisBottom={"format": "%d.%m.%y", "tickRotation": -45, "legend": "Zeitpunkt", "legendOffset": 60},
-                        axisLeft={"legend": "Dauer (sec)", "legendOffset": -60}
-                    )
-        else:
-            st.info("Keine validen Daten zur Visualisierung gefunden. Prüfe, ob die Dauer-Spalte Werte enthält.")
+    category = i[0]
+    st.subheader(f"Akzeptierte zeitliche Ausreißer - {category}")
+    st.dataframe(i[1], width="stretch", hide_index=True,)
+    comment_and_download_section(i[1], category, "Zeitlich")
